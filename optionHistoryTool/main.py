@@ -48,22 +48,22 @@ class Application(Frame):
         dg = LabelFrame(self, text="week(pick target day)", padx=5, pady=5)
         dg.pack(side=LEFT,padx=10, pady=10)
 
-        MODES = [
-            ("0", "0"),
-            ("1", "1"),
-            ("2", "2"),
-            ("3", "3"),
-            ("4", "4"),
-            ("5", "5"),
-            ("6", "6"),
-        ]
-        self.dayV = StringVar()
-        self.dayV.set("0")  # initialize
+        #MODES = [
+        #    ("0", "0"),
+        #    ("1", "1"),
+        #    ("2", "2"),
+        #    ("3", "3"),
+        #    ("4", "4"),
+        #    ("5", "5"),
+        #    ("6", "6"),
+        #]
+        #self.dayV = StringVar()
+        #self.dayV.set("0")  # initialize
 
-        for text, mode in MODES:
-            b = Radiobutton(dg, text=text,
-                            variable=self.dayV, value=mode)
-            b.pack(anchor=W)
+        #for text, mode in MODES:
+        #    b = Radiobutton(dg, text=text,
+        #                    variable=self.dayV, value=mode)
+        #    b.pack(anchor=W)
 
         ig = LabelFrame(self, text="ITM OTM", padx=5, pady=5)
         ig.pack(padx=10, pady=10)
@@ -97,8 +97,8 @@ class Application(Frame):
         vb.pack(padx=10, pady=10)
 
         self.priceVol = StringVar()
-        self.priceVol.set("1")  # initial value
-        option = OptionMenu(vb, self.priceVol, "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15")
+        self.priceVol.set("0")  # initial value
+        option = OptionMenu(vb, self.priceVol, "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15")
         option.pack()
 
         self.QUIT = Button(self)
@@ -166,7 +166,7 @@ class Application(Frame):
             # 1~5
             #if int(self.anyday) % 6 != 0:
                 #folder not exists, mk it
-            if os.path.isdir(".\\"+str(newday)) == False:
+            if os.path.isdir(".\\data\\"+str(newday)) == False:
                 self.genDays.append(newday)
                 #print os.path.exists(".\\"+str(newday)+"\\"+str(newday)+".txt")
             self.grabDays.append(newday)
@@ -189,19 +189,19 @@ class Application(Frame):
         for dateinfo in self.grabDays:
             #day filter
             weekday = datetime.datetime(dateinfo.year, dateinfo.month, dateinfo.day).strftime("%w")
-            if self.dayV.get() != weekday:
-                continue
+            #if self.dayV.get() != weekday:
+            #    continue
 
             today = str(dateinfo.year) + '/' + '{:02d}'.format(dateinfo.month) + "/" + '{:02d}'.format(dateinfo.day)
             # folder not exits, continue
             chckday = str(dateinfo.year) + '-' + '{:02d}'.format(dateinfo.month) + "-" + '{:02d}'.format(dateinfo.day)
-            if os.path.isdir(".\\" + str(chckday)) == False:
+            if os.path.isdir(".\\data\\" + str(chckday)) == False:
                 continue
 
             stopdayname = str(dateinfo.year)
             wlist = []
             secdata = []
-            path = ".\\"+str(dateinfo)+"\\"+str(dateinfo)+".txt"
+            path = ".\\data\\"+str(dateinfo)+"\\"+str(dateinfo)+".txt"
             f = open(path, 'rb')
             for row in csv.reader(f):
                 #print row[2]
@@ -245,6 +245,7 @@ class Application(Frame):
             #print semifinaldata
             #check lowest price
             n = len(semifinaldata)
+
             plusmidprice = []
             submidprice = []
             for i in range(0,n,2):
@@ -263,10 +264,10 @@ class Application(Frame):
                 plusmidprice.append(callprice + putprice)
                 submidprice.append(abs(callprice - putprice))
 
-            #print plusmidprice
-            #print submidprice
-            #print plusmidprice.index(max(plusmidprice))
-            #print submidprice.index(max(submidprice))
+            print plusmidprice
+            print submidprice
+            print plusmidprice.index(max(plusmidprice))
+            print submidprice.index(max(submidprice))
 
             #pick priveVol dataformat
             #0 1
@@ -278,22 +279,19 @@ class Application(Frame):
             if self.atmWay.get() == 'plusAtm':
                 midpox = plusmidprice.index(max(plusmidprice))
             else:
-                midpox = submidprice.index(max(submidprice))
+                putpox = submidprice.index(max(submidprice))
             midpox *= 2
-            putpox = midpox +1
+            putpox *= 2 +1
 
             # shift to get
             # call in -2 ,-4.... out +2,+4
             if self.tm.get() == "ITM":
                 midpox -= int(self.priceVol.get()) * 2
-            else:
-                midpox += int(self.priceVol.get()) * 2
-
-            if self.tm.get() == "ITM":
-                # put in +2 ,+4.... out -2,-4
                 putpox += int(self.priceVol.get()) * 2
             else:
+                midpox += int(self.priceVol.get()) * 2
                 putpox -= int(self.priceVol.get()) * 2
+
 
             #out put data
             getpo = len(semifinaldata)
@@ -305,6 +303,9 @@ class Application(Frame):
             if data[5] == '-':
                 continue
 
+            print n
+            print putpox
+            print len(semifinaldata)
 
             if putpox > getpo or putpox < 0:
                 continue
@@ -335,7 +336,7 @@ class Application(Frame):
             ds = ",".join(findata)
             ds +="\r\n"
             finalds.append(ds)
-        finalfileName = "week" + self.dayV.get() + "_" + self.tm.get() + "_" + self.atmWay.get() + "_" + self.priceVol.get()
+        finalfileName = "week" + "_" + self.tm.get() + "_" + self.atmWay.get() + "_" + self.priceVol.get()
         fp = open(".\\" + finalfileName + ".txt", "wb")
         for item in finalds:
             fp.write(item)
@@ -358,9 +359,9 @@ class Application(Frame):
             if self.nodata(re.sub('\r\n', '', r.content)):
                 continue
 
-            os.makedirs(".\\"+str(dateinfo))
+            os.makedirs(".\\data\\"+str(dateinfo))
             #save file
-            fp = open(".\\"+str(dateinfo)+"\\"+str(dateinfo)+".txt", "wb")
+            fp = open(".\\data\\"+str(dateinfo)+"\\"+str(dateinfo)+".txt", "wb")
             fp.write(r.content)
             fp.close()
 
