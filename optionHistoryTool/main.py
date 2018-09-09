@@ -213,7 +213,9 @@ class Application(Frame):
                     pattern = re.compile("("+stopdayname+"\\d\\d)(W(\\d))*")
                     matchObj = pattern.match(row[2])
                     if matchObj != None:
-                        secdata.append(row)
+                        #"normal data", not after pan data
+                        if row[17] != '\xbdL\xab\xe1':
+                            secdata.append(row)
                         #print matchObj.group(2)
                         #print row[2]
                         if matchObj.group(3) not in wlist:
@@ -232,7 +234,7 @@ class Application(Frame):
             #del old w
             if len(wlist) > 0:
                 for row in secdata:
-                    depe = re.compile("(" + stopdayname + "\\d\\d)(W" + wlist[len(wlist)-1] + ")")
+                    depe = re.compile("(" + stopdayname + "\\d\\d)(W" + wlist[0] + ")")
                     Obj = depe.match(row[2])
                     if Obj != None:
                         semifinaldata.append(row)
@@ -254,9 +256,9 @@ class Application(Frame):
                 callprice = 0
                 putprice = 0
                 if calldata[5] == '-':
-                    callprice = 0
+                    callprice = 99999
                 elif putdata[5] == '-':
-                    putprice = 0
+                    putprice = 99999
                 else:
                     callprice = float(calldata[5])
                     putprice = float(putdata[5])
@@ -266,8 +268,8 @@ class Application(Frame):
 
             print plusmidprice
             print submidprice
-            print plusmidprice.index(max(plusmidprice))
-            print submidprice.index(max(submidprice))
+            print plusmidprice.index(min(plusmidprice))
+            print submidprice.index(min(submidprice))
 
             #pick priveVol dataformat
             #0 1
@@ -277,11 +279,13 @@ class Application(Frame):
             putpox = 0
             #print "atm", self.atmWay.get()
             if self.atmWay.get() == 'plusAtm':
-                midpox = plusmidprice.index(max(plusmidprice))
+                midpox = plusmidprice.index(min(plusmidprice))
+                putpox = midpox
             else:
-                putpox = submidprice.index(max(submidprice))
+                midpox = submidprice.index(min(submidprice))
+                putpox = midpox
             midpox *= 2
-            putpox *= 2 +1
+            putpox = (putpox *2) +1
 
             # shift to get
             # call in -2 ,-4.... out +2,+4
@@ -298,7 +302,7 @@ class Application(Frame):
             if midpox > getpo or midpox < 0:
                 continue
 
-            data = semifinaldata.pop(midpox)
+            data = semifinaldata[midpox]
             print "call " + str(data)
             if data[5] == '-':
                 continue
@@ -309,7 +313,7 @@ class Application(Frame):
 
             if putpox > getpo or putpox < 0:
                 continue
-            putdata = semifinaldata.pop(putpox)
+            putdata = semifinaldata[putpox]
             print "put " + str(putdata)
             if putdata[5] == '-':
                 continue
@@ -326,6 +330,7 @@ class Application(Frame):
             findata.append(data[7])
             findata.append(data[8])
 
+            findata.append(putdata[3])
             findata.append(putdata[5])
             findata.append(putdata[6])
             findata.append(putdata[7])
