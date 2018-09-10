@@ -8,7 +8,6 @@ import csv
 
 
 
-
 class Application(Frame):
 
 
@@ -250,6 +249,11 @@ class Application(Frame):
 
             plusmidprice = []
             submidprice = []
+            callminNum = 99998
+            addminCnt = 1
+            putminNum = 99998
+            subminCnt = 1
+
             for i in range(0,n,2):
                 calldata = semifinaldata[i]
                 putdata = semifinaldata[i+1]
@@ -263,13 +267,27 @@ class Application(Frame):
                     callprice = float(calldata[5])
                     putprice = float(putdata[5])
 
-                plusmidprice.append(callprice + putprice)
-                submidprice.append(abs(callprice - putprice))
+                add = callprice + putprice
+                plusmidprice.append(add)
+                if add == callminNum:
+                    addminCnt += 1
+                if add < callminNum:
+                    callminNum = add
+                sub = abs(callprice - putprice)
+                submidprice.append(sub)
+                if sub == putminNum:
+                    subminCnt += 1
+                if sub < putminNum:
+                    putminNum = sub
 
             print plusmidprice
             print submidprice
             print plusmidprice.index(min(plusmidprice))
             print submidprice.index(min(submidprice))
+            print callminNum
+            print addminCnt
+            print putminNum
+            print subminCnt
 
             #pick priveVol dataformat
             #0 1
@@ -278,12 +296,22 @@ class Application(Frame):
             midpox = 0
             putpox = 0
             #print "atm", self.atmWay.get()
+            outSec = False
             if self.atmWay.get() == 'plusAtm':
                 midpox = plusmidprice.index(min(plusmidprice))
                 putpox = midpox
+
+                # two same price ,ITM put shift 2
+                if addminCnt == 2 and int(self.priceVol.get()) == 0:
+                    outSec = True
             else:
                 midpox = submidprice.index(min(submidprice))
                 putpox = midpox
+
+                # two same price ,OTM put shift 2
+                if subminCnt == 2 and int(self.priceVol.get()) == 0:
+                    outSec = True
+
             midpox *= 2
             putpox = (putpox *2) +1
 
@@ -292,10 +320,23 @@ class Application(Frame):
             if self.tm.get() == "ITM":
                 midpox -= int(self.priceVol.get()) * 2
                 putpox += int(self.priceVol.get()) * 2
+
+                if self.atmWay.get() == 'plusAtm':
+                    if addminCnt == 2 and int(self.priceVol.get()) != 0:
+                        putpox += 2
+                else:
+                    if subminCnt == 2 and int(self.priceVol.get()) != 0:
+                        putpox += 2
             else:
                 midpox += int(self.priceVol.get()) * 2
                 putpox -= int(self.priceVol.get()) * 2
 
+                if self.atmWay.get() == 'plusAtm':
+                    if addminCnt == 2 and int(self.priceVol.get()) != 0:
+                        midpox += 2
+                else:
+                    if subminCnt == 2 and int(self.priceVol.get()) != 0:
+                        midpox += 2
 
             #out put data
             getpo = len(semifinaldata)
@@ -303,6 +344,11 @@ class Application(Frame):
                 continue
 
             data = semifinaldata[midpox]
+            data2 = None
+            # if has sec data
+            if outSec:
+                data2 = semifinaldata[midpox+2]
+
             print "call " + str(data)
             if data[5] == '-':
                 continue
@@ -314,6 +360,9 @@ class Application(Frame):
             if putpox > getpo or putpox < 0:
                 continue
             putdata = semifinaldata[putpox]
+            putSecdata = None;
+            if outSec :
+                putSecdata = semifinaldata[putpox+2]
             print "put " + str(putdata)
             if putdata[5] == '-':
                 continue
@@ -338,9 +387,32 @@ class Application(Frame):
 
             print findata
 
+            findata2 = []
+            if outSec:
+                findata2.append(data2[0])
+                findata2.append(weekday)
+                findata2.append(data2[3])
+                findata2.append(data2[5])
+                findata2.append(data2[6])
+                findata2.append(data2[7])
+                findata2.append(data2[8])
+
+                findata2.append(putSecdata[3])
+                findata2.append(putSecdata[5])
+                findata2.append(putSecdata[6])
+                findata2.append(putSecdata[7])
+                findata2.append(putSecdata[8])
+
+            if outSec:
+                dds = ",".join(findata2)
+                dds += "\r\n"
+                finalds.append(dds)
+
             ds = ",".join(findata)
             ds +="\r\n"
             finalds.append(ds)
+
+
         finalfileName = "week" + "_" + self.tm.get() + "_" + self.atmWay.get() + "_" + self.priceVol.get()
         fp = open(".\\" + finalfileName + ".txt", "wb")
         for item in finalds:
