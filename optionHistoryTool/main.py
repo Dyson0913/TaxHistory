@@ -247,6 +247,9 @@ class Application(Frame):
             #check lowest price
             n = len(semifinaldata)
 
+            if n==0:
+                continue
+
             plusmidprice = []
             submidprice = []
             callminNum = 99998
