@@ -204,12 +204,12 @@ class Application(Frame):
             f = open(path, 'rb')
             for row in csv.reader(f):
                 #print row[2]
-                wjudge = re.compile("("+stopdayname + "\\d\\d)(W(\\d))*")
+                wjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
                 prematchObj = wjudge.match(row[2])
 
                 #has w1 w2
                 if prematchObj != None and prematchObj.group(2) != None:
-                    pattern = re.compile("("+stopdayname+"\\d\\d)(W(\\d))*")
+                    pattern = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
                     matchObj = pattern.match(row[2])
                     if matchObj != None:
                         #"normal data", not after pan data
@@ -233,7 +233,7 @@ class Application(Frame):
             #del old w
             if len(wlist) > 0:
                 for row in secdata:
-                    depe = re.compile("(" + stopdayname + "\\d\\d)(W" + wlist[0] + ")")
+                    depe = re.compile("(" + "\\d\\d\\d\\d\\d\\d)(W" + wlist[0] + ")")
                     Obj = depe.match(row[2])
                     if Obj != None:
                         semifinaldata.append(row)
@@ -418,6 +418,7 @@ class Application(Frame):
 
         finalfileName = "week" + "_" + self.tm.get() + "_" + self.atmWay.get() + "_" + self.priceVol.get()
         fp = open(".\\" + finalfileName + ".txt", "wb")
+        finalds.reverse()
         for item in finalds:
             fp.write(item)
 
