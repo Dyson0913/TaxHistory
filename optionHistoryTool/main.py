@@ -232,11 +232,15 @@ class Application(Frame):
             semifinaldata =[]
             #del old w
             if len(wlist) > 0:
-                for row in secdata:
-                    depe = re.compile("(" + "\\d\\d\\d\\d\\d\\d)(W" + wlist[0] + ")")
-                    Obj = depe.match(row[2])
-                    if Obj != None:
-                        semifinaldata.append(row)
+                #w4 prejudge
+                if len(wlist) == 1:
+                    semifinaldata = self.filterw4(secdata)
+                else:
+                    for row in secdata:
+                        depe = re.compile("(" + "\\d\\d\\d\\d\\d\\d)(W" + wlist[0] + ")")
+                        Obj = depe.match(row[2])
+                        if Obj != None:
+                            semifinaldata.append(row)
             else:
                 #w3 only keep "normal data", not after pan data
                 for row in secdata:
@@ -453,6 +457,31 @@ class Application(Frame):
             return True
             return False
 
+    def filterw4(self,data):
+
+        hasw4 = False
+        for row in data:
+            # print row[2]
+            wjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
+            prematchObj = wjudge.match(row[2])
+            #check is have w4
+            if prematchObj != None and prematchObj.group(2) != None:
+                if prematchObj.group(3) == "4":
+                    hasw4 = True
+                    break;
+
+        newW3 = [];
+        if hasw4:
+            #filter W4 ,keep data like 201801
+            for row in data:
+                # print row[2]
+                wjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
+                prematchObj = wjudge.match(row[2])
+                # check is have w4
+                if prematchObj != None and prematchObj.group(2) == None:
+                   newW3.append(row)
+            return newW3
+        return data
     def __init__(self, master=None):
         Frame.__init__(self, master)
         self.pack()
