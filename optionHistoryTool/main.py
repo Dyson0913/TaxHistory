@@ -460,6 +460,7 @@ class Application(Frame):
     def filterw4(self,data):
 
         hasw4 = False
+        w4Cnt = 0;
         for row in data:
             # print row[2]
             wjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
@@ -468,7 +469,10 @@ class Application(Frame):
             if prematchObj != None and prematchObj.group(2) != None:
                 if prematchObj.group(3) == "4":
                     hasw4 = True
-                    break;
+                    w4Cnt +=1
+
+        if hasw4 and (w4Cnt == len(data)):
+            return data
 
         newW3 = [];
         if hasw4:
