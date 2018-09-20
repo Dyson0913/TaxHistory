@@ -47,23 +47,23 @@
     <session id="935175143">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="14" />
+          <entry key="project.closed" value="15" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.5" value="1" />
-          <entry key="project.open.time.7" value="7" />
+          <entry key="project.open.time.7" value="8" />
           <entry key="project.open.time.8" value="4" />
-          <entry key="project.opened" value="14" />
+          <entry key="project.opened" value="15" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="1318" />
+          <entry key="py" value="1321" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="1318" />
+          <entry key="Python" value="1321" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -83,17 +83,17 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="306" selection-start-line="306" selection-end-line="306" />
+            <state relative-caret-position="181">
+              <caret line="186" selection-start-line="186" selection-end-line="186" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
-                <marker date="1537429243293" expanded="true" signature="141:146" ph="..." />
-                <marker date="1537429243293" expanded="true" signature="3179:3184" ph="..." />
-                <marker date="1537429243293" expanded="true" signature="3207:3893" ph="..." />
-                <marker date="1537429243293" expanded="true" signature="3587:3593" ph="..." />
-                <marker date="1537429243293" expanded="true" signature="3630:3639" ph="..." />
-                <marker date="1537429243293" expanded="true" signature="3630:3893" ph="..." />
-                <marker date="1537429243293" expanded="true" signature="3909:3918" ph="..." />
+                <marker date="1537437907262" expanded="true" signature="141:146" ph="..." />
+                <marker date="1537437907262" expanded="true" signature="3179:3184" ph="..." />
+                <marker date="1537437907262" expanded="true" signature="3207:3893" ph="..." />
+                <marker date="1537437907262" expanded="true" signature="3587:3593" ph="..." />
+                <marker date="1537437907262" expanded="true" signature="3630:3639" ph="..." />
+                <marker date="1537437907262" expanded="true" signature="3630:3893" ph="..." />
+                <marker date="1537437907262" expanded="true" signature="3909:3918" ph="..." />
               </folding>
             </state>
           </provider>
@@ -102,7 +102,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://C:/Python27/Lib/re.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="214">
+            <state relative-caret-position="4775">
               <caret line="193" selection-start-line="193" selection-end-line="193" />
             </state>
           </provider>
@@ -355,7 +355,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>486</line>
+          <line>487</line>
           <option name="timeStamp" value="15" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -375,34 +375,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/Python27/Lib/lib-tk/Tkinter.py">
+    <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38500">
-          <caret line="1540" selection-start-line="1540" selection-end-line="1540" />
+        <state relative-caret-position="181">
+          <caret line="186" selection-start-line="186" selection-end-line="186" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+            <marker date="1537437907262" expanded="true" signature="141:146" ph="..." />
+            <marker date="1537437907262" expanded="true" signature="3179:3184" ph="..." />
+            <marker date="1537437907262" expanded="true" signature="3207:3893" ph="..." />
+            <marker date="1537437907262" expanded="true" signature="3587:3593" ph="..." />
+            <marker date="1537437907262" expanded="true" signature="3630:3639" ph="..." />
+            <marker date="1537437907262" expanded="true" signature="3630:3893" ph="..." />
+            <marker date="1537437907262" expanded="true" signature="3909:3918" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://C:/Python27/Lib/re.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
+        <state relative-caret-position="4775">
           <caret line="193" selection-start-line="193" selection-end-line="193" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://C:/Python27/Lib/lib-tk/Tkinter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="306" selection-start-line="306" selection-end-line="306" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-            <marker date="1537429243293" expanded="true" signature="141:146" ph="..." />
-            <marker date="1537429243293" expanded="true" signature="3179:3184" ph="..." />
-            <marker date="1537429243293" expanded="true" signature="3207:3893" ph="..." />
-            <marker date="1537429243293" expanded="true" signature="3587:3593" ph="..." />
-            <marker date="1537429243293" expanded="true" signature="3630:3639" ph="..." />
-            <marker date="1537429243293" expanded="true" signature="3630:3893" ph="..." />
-            <marker date="1537429243293" expanded="true" signature="3909:3918" ph="..." />
-          </folding>
+        <state relative-caret-position="38500">
+          <caret line="1540" selection-start-line="1540" selection-end-line="1540" />
         </state>
       </provider>
     </entry>

@@ -483,7 +483,8 @@ class Application(Frame):
                 prematchObj = wjudge.match(row[2])
                 # check is have w4
                 if prematchObj != None and prematchObj.group(2) == None:
-                   newW3.append(row)
+                    if row[17] == '\xa4@\xaf\xeb':
+                        newW3.append(row)
             return newW3
         return data
     def __init__(self, master=None):
