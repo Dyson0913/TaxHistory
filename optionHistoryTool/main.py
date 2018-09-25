@@ -261,6 +261,9 @@ class Application(Frame):
             putminNum = 99998
             subminCnt = 1
 
+            #check un-normal decline (like 2016/5/5 wired , 288-> 104-> 196)
+            callplist =[]
+            callsortvalue = 99999
             for i in range(0,n,2):
                 calldata = semifinaldata[i]
                 putdata = semifinaldata[i+1]
@@ -268,11 +271,15 @@ class Application(Frame):
                 putprice = 0
                 if calldata[5] == '-':
                     callprice = 99999
+                    callplist.append(callsortvalue)
+                    callsortvalue -=0.1
                 elif putdata[5] == '-':
                     putprice = 99999
                 else:
                     callprice = float(calldata[5])
                     putprice = float(putdata[5])
+                    callplist.append(callprice)
+                    callsortvalue = callprice - 0.1
 
                 add = callprice + putprice
                 plusmidprice.append(add)
@@ -292,9 +299,10 @@ class Application(Frame):
             print plusmidprice.index(min(plusmidprice))
             print submidprice.index(min(submidprice))
             print callminNum
-            print addminCnt
+            #print addminCnt
             print putminNum
-            print subminCnt
+            #print subminCnt
+            #print callplist
 
             #pick priveVol dataformat
             #0 1
@@ -305,14 +313,14 @@ class Application(Frame):
             #print "atm", self.atmWay.get()
             outSec = False
             if self.atmWay.get() == 'plusAtm':
-                midpox = plusmidprice.index(min(plusmidprice))
+                midpox = self.adjustWiredmidprice(plusmidprice) #plusmidprice.index(min(plusmidprice))
                 putpox = midpox
 
                 # two same price ,ITM put shift 2
                 if addminCnt == 2 and int(self.priceVol.get()) == 0:
                     outSec = True
             else:
-                midpox = submidprice.index(min(submidprice))
+                midpox = self.adjustWiredmidprice(submidprice) #submidprice.index(min(submidprice))
                 putpox = midpox
 
                 # two same price ,OTM put shift 2
@@ -487,6 +495,33 @@ class Application(Frame):
                         newW3.append(row)
             return newW3
         return data
+
+    def adjustWiredmidprice(self,midprice):
+        mid = midprice.index(min(midprice))
+
+        #check mid is same as wired,if yes ,find secd min as midprice
+        cmp = 100000
+        wirdidx = -1
+        for i in range(0 ,len(midprice)):
+            price = midprice[i]
+            if (cmp - price) < 0:
+                wirdidx = i
+                break
+            cmp = price
+        wirdidx -= 1
+        print wirdidx
+        midprice[wirdidx] = 99999
+        print midprice
+        print midprice.index(min(midprice))
+        #no wired , used default mid
+        if wirdidx == -1:
+            return mid
+        elif mid == wirdidx:
+            return  midprice.index(min(midprice))
+
+        #find last ,used default
+        return mid
+
     def __init__(self, master=None):
         Frame.__init__(self, master)
         self.pack()
