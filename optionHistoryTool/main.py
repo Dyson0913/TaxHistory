@@ -5,6 +5,7 @@ import re
 import requests
 from datetime import date
 import csv
+from bs4 import BeautifulSoup
 
 
 
@@ -100,6 +101,14 @@ class Application(Frame):
         option = OptionMenu(vb, self.priceVol, "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15")
         option.pack()
 
+        gSett = LabelFrame(self, text="settledays", padx=5, pady=5)
+        gSett.pack(padx=10, pady=10)
+
+        self.settleday = IntVar()
+
+        c = Checkbutton(gSett, text="settle", variable=self.settleday)
+        c.pack()
+
         self.QUIT = Button(self)
         self.QUIT["text"] = "Gentxt"
         self.QUIT["fg"] = "red"
@@ -170,6 +179,8 @@ class Application(Frame):
                 #print os.path.exists(".\\"+str(newday)+"\\"+str(newday)+".txt")
             self.grabDays.append(newday)
 
+        #if check settle , just parse filter day
+        self.settlefilter()
 
         #save file
         self.stateS.set("start = grab data....")
@@ -263,6 +274,7 @@ class Application(Frame):
 
             #check un-normal decline (like 2016/5/5 wired , 288-> 104-> 196)
             callplist =[]
+            putplist =[]
             callsortvalue = 99999
             for i in range(0,n,2):
                 calldata = semifinaldata[i]
@@ -271,15 +283,16 @@ class Application(Frame):
                 putprice = 0
                 if calldata[5] == '-':
                     callprice = 99999
-                    callplist.append(callsortvalue)
-                    callsortvalue -=0.1
-                elif putdata[5] == '-':
-                    putprice = 99999
                 else:
                     callprice = float(calldata[5])
+                callplist.append(callprice)
+
+                if putdata[5] == '-':
+                    putprice = 99999
+                else:
                     putprice = float(putdata[5])
-                    callplist.append(callprice)
-                    callsortvalue = callprice - 0.1
+                putplist.append(putprice)
+                    #callsortvalue = callprice - 0.1
 
                 add = callprice + putprice
                 plusmidprice.append(add)
@@ -313,14 +326,14 @@ class Application(Frame):
             #print "atm", self.atmWay.get()
             outSec = False
             if self.atmWay.get() == 'plusAtm':
-                midpox = self.adjustWiredmidprice(plusmidprice) #plusmidprice.index(min(plusmidprice))
+                midpox = self.adjustWiredmidprice(plusmidprice,callplist,putplist,0) #plusmidprice.index(min(plusmidprice))
                 putpox = midpox
 
                 # two same price ,ITM put shift 2
                 if addminCnt == 2 and int(self.priceVol.get()) == 0:
                     outSec = True
             else:
-                midpox = self.adjustWiredmidprice(submidprice) #submidprice.index(min(submidprice))
+                midpox = self.adjustWiredmidprice(submidprice,callplist,putplist,1) #submidprice.index(min(submidprice))
                 putpox = midpox
 
                 # two same price ,OTM put shift 2
@@ -496,31 +509,90 @@ class Application(Frame):
             return newW3
         return data
 
-    def adjustWiredmidprice(self,midprice):
+    def adjustWiredmidprice(self,midprice,pluslist,sublist,type):
         mid = midprice.index(min(midprice))
 
         #check mid is same as wired,if yes ,find secd min as midprice
         cmp = 100000
         wirdidx = -1
-        for i in range(0 ,len(midprice)):
-            price = midprice[i]
+        for i in range(0 ,len(pluslist)):
+            price = pluslist[i]
             if (cmp - price) < 0:
                 wirdidx = i
                 break
             cmp = price
-        wirdidx -= 1
-        print wirdidx
-        midprice[wirdidx] = 99999
-        print midprice
-        print midprice.index(min(midprice))
         #no wired , used default mid
         if wirdidx == -1:
             return mid
-        elif mid == wirdidx:
-            return  midprice.index(min(midprice))
+        elif mid == wirdidx-1:
+            wirdidx -= 1
+            pluslist[wirdidx] = 99999
+            #re plus and find min
+            sum = []
+            add = 0;
+            for i in range(0, len(pluslist)):
+                if type ==0:
+                    add = pluslist[i] + sublist[i]
+                else:
+                    add = abs( pluslist[i] - sublist[i])
+                sum.append(add)
+            return  sum.index(min(sum))
 
         #find last ,used default
         return mid
+
+    def settledays(self):
+        year, month, mydate = self.datepare(self.databegin.get())
+        eyear, emonth, emydate = self.datepare(self.dataend.get())
+        #month = 10
+        #emonth =10
+        my_data = {'syear': year, 'smonth': '{:02d}'.format(month), 'eyear': eyear, 'emonth': '{:02d}'.format(emonth),
+                   'COMMODITY_ID': 1}
+        # print my_data
+        r = requests.post('http://www.taifex.com.tw/chinese/5/FutIndxFSP.asp', data=my_data)
+        self.stateS.set("grab data ")
+        soup = BeautifulSoup(r.content, 'html.parser')
+        table = soup.find('table', {'class': 'table_c'})
+
+        for i, tr in enumerate(table.findAll('tr')):
+            if i == 0:
+                tr.extract()
+
+        table_tr = table.findAll("tr")
+        filterdata = []
+        if len(table_tr) == 0:
+            return filterdata
+        else:
+            for row in table.findAll("tr"):
+                cells = row.findAll("td")
+                #print cells[0].find(text=True)
+                filterdata.append(cells[0].find(text=True))
+
+        ds = ",".join(filterdata)
+        ds += "\r\n"
+
+        # save file
+        fp = open(".\\data\\settle.txt", "wb")
+        fp.write(ds)
+        fp.close()
+        return filterdata
+
+    def settlefilter(self):
+        if self.settleday.get() == 0:
+            return
+
+        filterdate = self.settledays()
+
+        newfilter = []
+        for dateinfo in self.grabDays:
+            # day filter
+            today = str(dateinfo.year) + '/' + str(dateinfo.month) + "/" + str(dateinfo.day)
+            if today in  filterdate:
+                newfilter.append(dateinfo)
+
+        print newfilter
+        if len(newfilter) != 0:
+            self.grabDays = newfilter
 
     def __init__(self, master=None):
         Frame.__init__(self, master)
