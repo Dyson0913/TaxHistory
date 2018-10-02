@@ -171,9 +171,8 @@ class Application(Frame):
             newday = backday - delta
             self.anyday = datetime.datetime(newday.year, newday.month, newday.day).strftime("%w")
             #print "%s  week %d %d" % (str(newday), int(self.anyday),(int(self.anyday) % 6 != 0 ))
-            # 1~5
-            #if int(self.anyday) % 6 != 0:
-                #folder not exists, mk it
+
+            #folder not exists, mk it
             if os.path.isdir(".\\data\\"+str(newday)) == False:
                 self.genDays.append(newday)
                 #print os.path.exists(".\\"+str(newday)+"\\"+str(newday)+".txt")
@@ -456,9 +455,11 @@ class Application(Frame):
         for dateinfo in self.genDays:
             rdateStart = str(dateinfo.year) + '/' + '{:02d}'.format(dateinfo.month) + "/" + '{:02d}'.format(dateinfo.day)
             rdateEnd = str(dateinfo.year) + '/' + '{:02d}'.format(dateinfo.month) + "/" + '{:02d}'.format(dateinfo.day)
-            my_data = {'DATA_DATE': rdateStart, 'DATA_DATE1': rdateEnd, 'datestart': rdateStart, 'dateend': rdateEnd,'COMMODITY_ID': 'TXO', 'his_year': '2017'}
+            #my_data = {'DATA_DATE': rdateStart, 'DATA_DATE1': rdateEnd, 'datestart': rdateStart, 'dateend': rdateEnd,'COMMODITY_ID': 'TXO', 'his_year': '2017'}
+            my_data = {'queryStartDate': rdateStart, 'queryEndDate': rdateEnd, 'down_type': 1, 'commodity_id': 'TXO'}
             #print my_data
-            r = requests.post('http://www.taifex.com.tw/chinese/3/3_2_3_b.asp', data=my_data)
+            #r = requests.post('http://www.taifex.com.tw/chinese/3/3_2_3_b.asp', data=my_data)
+            r = requests.post('http://www.taifex.com.tw/cht/3/optDataDown.asp', data=my_data)
             self.stateS.set("grab data "+rdateStart)
             # print r.status_code
             # print r.content
@@ -472,11 +473,15 @@ class Application(Frame):
             fp.close()
 
     def nodata(self, str):
+        if len(str) == 175:
+            return True
+        return False
+
         matchObj = re.match('(.+)', str)
         # print matchObj.endpos
         if matchObj.endpos == 441:
             return True
-            return False
+        return False
 
     def filterw4(self,data):
 
@@ -554,6 +559,10 @@ class Application(Frame):
         soup = BeautifulSoup(r.content, 'html.parser')
         table = soup.find('table', {'class': 'table_c'})
 
+        if table is None:
+            self.errorMsg("grab settle error!! website may change")
+            return None
+
         for i, tr in enumerate(table.findAll('tr')):
             if i == 0:
                 tr.extract()
@@ -582,6 +591,10 @@ class Application(Frame):
             return
 
         filterdate = self.settledays()
+
+        #if filterdate == None, want settle day and settle day can't grab, not handle
+        if filterdate is None:
+            return
 
         newfilter = []
         for dateinfo in self.grabDays:
