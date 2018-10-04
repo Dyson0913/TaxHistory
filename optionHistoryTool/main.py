@@ -11,8 +11,8 @@ from bs4 import BeautifulSoup
 
 class Application(Frame):
 
-
     def createWidgets(self):
+
         self.var = IntVar()
         self.var.set(1)
         c = Checkbutton(
@@ -125,8 +125,6 @@ class Application(Frame):
         top.title("error")
         msg = Message(top, text=msg)
         msg.pack()
-        #button = Button(top, text="close", command=top.destroy)
-        #button.pack()
 
     def datepare(self,str):
         matchObj = re.match(r'(\d+)\-(\d+)-(\d+)', str, re.M | re.I)
@@ -590,7 +588,9 @@ class Application(Frame):
         if self.settleday.get() == 0:
             return
 
-        filterdate = self.settledays()
+        #filterdate = self.settledays()
+        filterdate = self.grabNewsettledays()
+
 
         #if filterdate == None, want settle day and settle day can't grab, not handle
         if filterdate is None:
@@ -599,13 +599,58 @@ class Application(Frame):
         newfilter = []
         for dateinfo in self.grabDays:
             # day filter
-            today = str(dateinfo.year) + '/' + str(dateinfo.month) + "/" + str(dateinfo.day)
+            today = str(dateinfo.year) + '/' + '{:02d}'.format(dateinfo.month) + "/" + '{:02d}'.format(dateinfo.day)
             if today in  filterdate:
                 newfilter.append(dateinfo)
 
         print newfilter
         if len(newfilter) != 0:
             self.grabDays = newfilter
+
+    def grabNewsettledays(self):
+        year, month, mydate = self.datepare(self.databegin.get())
+        eyear, emonth, emydate = self.datepare(self.dataend.get())
+        my_data = {'start_year': year, 'start_month': '{:02d}'.format(month), 'end_year': eyear, 'end_month': '{:02d}'.format(emonth),'dlFileType':3}
+        r = requests.post('https://www.taifex.com.tw/cht/5/fSPDataDown.asp', data=my_data)
+
+        #print r.status_code
+        #print len(r.content)
+        if len(r.content) == 92:
+            #using local settleday.txt
+            if os.path.isfile(".\\data\\settleday.txt") == False:
+                self.errorMsg("grab settle error!! website may change")
+                return None
+
+            #local settleday exsit, read and return
+            fd = []
+            finfd = [];
+            path = ".\\data\\settleday.txt"
+            with open(path) as f:
+                for line in f:
+                    fd = line.strip().split(',')
+                    for day in fd:
+                        finfd.append(day)
+            return finfd
+
+        fp = open(".\\data\\settle.txt", "wb")
+        fp.write(r.content)
+        fp.close()
+
+        filterdata = []
+        path = ".\\data\\settle.txt"
+        f = open(path, 'rb')
+        for row in csv.reader(f):
+            if row[2] == 'TXO':
+                filterdata.append(row[0])
+
+        ds = ",".join(filterdata)
+        ds += "\r\n"
+
+        # save file
+        fp = open(".\\data\\settleday.txt", "wb")
+        fp.write(ds)
+        fp.close()
+        return filterdata
 
     def __init__(self, master=None):
         Frame.__init__(self, master)
