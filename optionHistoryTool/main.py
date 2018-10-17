@@ -232,7 +232,7 @@ class Application(Frame):
                     if len(wlist) != 0:
                         continue
                     daymatch = str(dateinfo.year) + '{:02d}'.format(dateinfo.month)
-                    if row[2] == daymatch:
+                    if row[2].strip() == daymatch:
                         secdata.append(row)
 
             f.close()
