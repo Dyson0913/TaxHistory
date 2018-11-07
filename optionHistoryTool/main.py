@@ -259,7 +259,8 @@ class Application(Frame):
             #check lowest price
             n = len(semifinaldata)
 
-            if n==0:
+            if n == 0:
+                self.errorMsg("no match data ,output empty file")
                 continue
 
             plusmidprice = []
@@ -437,6 +438,9 @@ class Application(Frame):
             ds +="\r\n"
             finalds.append(ds)
 
+        if len(finalds) == 0:
+            self.errorMsg("no match data ,not out put file")
+            return
 
         finalfileName = "week" + "_" + self.tm.get() + "_" + self.atmWay.get() + "_" + self.priceVol.get()
         fp = open(".\\" + finalfileName + ".txt", "wb")
