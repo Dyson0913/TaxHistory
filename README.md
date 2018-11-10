@@ -13,6 +13,11 @@ http://www.taifex.com.tw/chinese/5/FutIndxFSP.asp?syear=2018&smonth=09&eyear=201
 --------------------------------------
 
 ------------------------------------
+#2018/11/11 source web para modity
+
+fix doubleprice not min bug & doubleprice not continue handle as single data
+
+------------------------------------
 #2018/10/03 source web para modity
 
 -history web mofity to 

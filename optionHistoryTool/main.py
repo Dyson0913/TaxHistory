@@ -274,6 +274,8 @@ class Application(Frame):
             callplist =[]
             putplist =[]
             callsortvalue = 99999
+            doublePriceValue = -1;
+            doublePriceValueSub = -1;
             for i in range(0,n,2):
                 calldata = semifinaldata[i]
                 putdata = semifinaldata[i+1]
@@ -296,12 +298,14 @@ class Application(Frame):
                 plusmidprice.append(add)
                 if add == callminNum:
                     addminCnt += 1
+                    doublePriceValue = i/2
                 if add < callminNum:
                     callminNum = add
                 sub = abs(callprice - putprice)
                 submidprice.append(sub)
                 if sub == putminNum:
                     subminCnt += 1
+                    doublePriceValueSub = i/2
                 if sub < putminNum:
                     putminNum = sub
 
@@ -309,11 +313,6 @@ class Application(Frame):
             print submidprice
             print plusmidprice.index(min(plusmidprice))
             print submidprice.index(min(submidprice))
-            print callminNum
-            #print addminCnt
-            print putminNum
-            #print subminCnt
-            #print callplist
 
             #pick priveVol dataformat
             #0 1
@@ -321,7 +320,6 @@ class Application(Frame):
             #4 5
             midpox = 0
             putpox = 0
-            #print "atm", self.atmWay.get()
             outSec = False
             if self.atmWay.get() == 'plusAtm':
                 midpox = self.adjustWiredmidprice(plusmidprice,callplist,putplist,0) #plusmidprice.index(min(plusmidprice))
@@ -329,14 +327,18 @@ class Application(Frame):
 
                 # two same price ,ITM put shift 2
                 if addminCnt == 2 and int(self.priceVol.get()) == 0:
-                    outSec = True
+                    # two price the same,judge is the min
+                    if doublePriceValue - plusmidprice.index(min(plusmidprice)) == 1:
+                        outSec = True
             else:
                 midpox = self.adjustWiredmidprice(submidprice,callplist,putplist,1) #submidprice.index(min(submidprice))
                 putpox = midpox
 
                 # two same price ,OTM put shift 2
                 if subminCnt == 2 and int(self.priceVol.get()) == 0:
-                    outSec = True
+                    # two price the same,judge is the min
+                    if doublePriceValueSub - submidprice.index(min(submidprice)) == 1:
+                        outSec = True
 
             midpox *= 2
             putpox = (putpox *2) +1
