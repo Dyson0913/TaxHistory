@@ -245,7 +245,8 @@ class Application(Frame):
                     semifinaldata = self.filterw4(secdata)
                 else:
                     for row in secdata:
-                        depe = re.compile("(" + "\\d\\d\\d\\d\\d\\d)(W" + wlist[0] + ")")
+                        #wlist w4,w1,get w4, modify to get last
+                        depe = re.compile("(" + "\\d\\d\\d\\d\\d\\d)(W" + wlist[1] + ")")
                         Obj = depe.match(row[2])
                         if Obj != None:
                             semifinaldata.append(row)

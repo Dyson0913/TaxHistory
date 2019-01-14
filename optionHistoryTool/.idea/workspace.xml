@@ -59,12 +59,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="4508" />
+          <entry key="py" value="4559" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="4508" />
+          <entry key="Python" value="4559" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -84,19 +84,19 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="193">
-              <caret line="326" selection-start-line="326" selection-end-line="326" />
+            <state relative-caret-position="310">
+              <caret line="250" column="39" lean-forward="true" selection-start-line="250" selection-start-column="39" selection-end-line="250" selection-end-column="39" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
-                <marker date="1547442884781" expanded="true" signature="170:175" ph="..." />
-                <marker date="1547442884781" expanded="true" signature="3439:3444" ph="..." />
-                <marker date="1547442884781" expanded="true" signature="3467:4065" ph="..." />
-                <marker date="1547442884781" expanded="true" signature="3759:3765" ph="..." />
-                <marker date="1547442884781" expanded="false" signature="3802:3811" ph="..." />
-                <marker date="1547442884781" expanded="true" signature="3802:4065" ph="..." />
-                <marker date="1547442884781" expanded="true" signature="4081:4090" ph="..." />
-                <marker date="1547442884781" expanded="true" signature="18881:18882" ph="..." />
-                <marker date="1547442884781" expanded="true" signature="20255:22473" ph="..." />
+                <marker date="1547449252577" expanded="true" signature="170:175" ph="..." />
+                <marker date="1547449252577" expanded="true" signature="3439:3444" ph="..." />
+                <marker date="1547449252577" expanded="true" signature="3467:4065" ph="..." />
+                <marker date="1547449252577" expanded="true" signature="3759:3765" ph="..." />
+                <marker date="1547449252577" expanded="false" signature="3802:3811" ph="..." />
+                <marker date="1547449252577" expanded="true" signature="3802:4065" ph="..." />
+                <marker date="1547449252577" expanded="true" signature="4081:4090" ph="..." />
+                <marker date="1547449252577" expanded="true" signature="18945:18946" ph="..." />
+                <marker date="1547449252577" expanded="true" signature="20319:22537" ph="..." />
               </folding>
             </state>
           </provider>
@@ -132,6 +132,7 @@
       <find>errorMsg</find>
       <find>#filterdate = self.settledays()</find>
       <find>settledays</find>
+      <find>self.settleday</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -146,10 +147,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1056" />
+    <option name="x" value="-7" />
+    <option name="width" value="1934" />
+    <option name="height" value="1047" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -317,15 +317,16 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="0" />
+    <frame x="-7" y="0" width="1934" height="1047" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25922024" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25949368" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49367756" weight="0.26789588" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.318872" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.21905805" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.329718" />
@@ -347,23 +348,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>617</line>
+          <line>618</line>
           <option name="timeStamp" value="27" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>603</line>
-          <option name="timeStamp" value="29" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>631</line>
+          <line>632</line>
           <option name="timeStamp" value="34" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>262</line>
-          <option name="timeStamp" value="44" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
@@ -377,18 +368,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>259</line>
-          <option name="timeStamp" value="47" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>317</line>
+          <line>318</line>
           <option name="timeStamp" value="48" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>306</line>
-          <option name="timeStamp" value="50" />
+          <line>386</line>
+          <option name="timeStamp" value="51" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -428,19 +414,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="193">
-          <caret line="326" selection-start-line="326" selection-end-line="326" />
+        <state relative-caret-position="310">
+          <caret line="250" column="39" lean-forward="true" selection-start-line="250" selection-start-column="39" selection-end-line="250" selection-end-column="39" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-            <marker date="1547442884781" expanded="true" signature="170:175" ph="..." />
-            <marker date="1547442884781" expanded="true" signature="3439:3444" ph="..." />
-            <marker date="1547442884781" expanded="true" signature="3467:4065" ph="..." />
-            <marker date="1547442884781" expanded="true" signature="3759:3765" ph="..." />
-            <marker date="1547442884781" expanded="false" signature="3802:3811" ph="..." />
-            <marker date="1547442884781" expanded="true" signature="3802:4065" ph="..." />
-            <marker date="1547442884781" expanded="true" signature="4081:4090" ph="..." />
-            <marker date="1547442884781" expanded="true" signature="18881:18882" ph="..." />
-            <marker date="1547442884781" expanded="true" signature="20255:22473" ph="..." />
+            <marker date="1547449252577" expanded="true" signature="170:175" ph="..." />
+            <marker date="1547449252577" expanded="true" signature="3439:3444" ph="..." />
+            <marker date="1547449252577" expanded="true" signature="3467:4065" ph="..." />
+            <marker date="1547449252577" expanded="true" signature="3759:3765" ph="..." />
+            <marker date="1547449252577" expanded="false" signature="3802:3811" ph="..." />
+            <marker date="1547449252577" expanded="true" signature="3802:4065" ph="..." />
+            <marker date="1547449252577" expanded="true" signature="4081:4090" ph="..." />
+            <marker date="1547449252577" expanded="true" signature="18945:18946" ph="..." />
+            <marker date="1547449252577" expanded="true" signature="20319:22537" ph="..." />
           </folding>
         </state>
       </provider>
