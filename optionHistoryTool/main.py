@@ -95,11 +95,27 @@ class Application(Frame):
 
         vb = LabelFrame(self, text="priceVolume", padx=5, pady=5)
         vb.pack(padx=10, pady=10)
+        SelecModes = [
+            ("interval", "interval"),
+            ("point", "point"),
+        ]
+        self.interval = StringVar()
+        self.interval.set("interval")  # initialize
+        for text, mode in SelecModes:
+            b = Radiobutton(vb, text=text,
+                            variable=self.interval, value=mode)
+            b.pack(side=LEFT)
 
         self.priceVol = StringVar()
         self.priceVol.set("0")  # initial value
         option = OptionMenu(vb, self.priceVol, "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15")
-        option.pack()
+        option.pack(side=TOP)
+
+        self.pointInterval = Entry(vb)
+        self.pointInterval.insert(0, str(100))
+        self.pointInterval.grid(row=0, column=1)
+        self.pointInterval.pack(side=BOTTOM)
+
 
         gSett = LabelFrame(self, text="settledays", padx=5, pady=5)
         gSett.pack(padx=10, pady=10)
@@ -378,6 +394,19 @@ class Application(Frame):
             if midpox > getpo or midpox < 0:
                 continue
 
+            #not mention begin, so ~~ ha ha
+            if self.interval.get() == "point":
+                # get callrawdata and putrawdata
+                call, put = self.create_atm_form(semifinaldata)
+                # add and sub call and put
+                plusprice, subprice = self.calculate_atm(call, put)
+                # decide callAtm and putAtm
+                callidx, putidx = self.atm_decide(plusprice, subprice)
+                # poick idx of call and put
+                calldataidx, putdataidx = self.atm_shift(callidx, putidx, call, put)
+                midpox = calldataidx*2
+                putpox = putdataidx*2
+
             data = semifinaldata[midpox]
             data2 = None
             # if has sec data
@@ -385,8 +414,7 @@ class Application(Frame):
                 data2 = semifinaldata[midpox+2]
 
             print "call " + str(data)
-            if data[5] == '-':
-                continue
+
 
             print n
             print putpox
@@ -399,8 +427,7 @@ class Application(Frame):
             if outSec :
                 putSecdata = semifinaldata[putpox+2]
             print "put " + str(putdata)
-            if putdata[5] == '-':
-                continue
+
 
             findata =[]
             if weekday == "0":
@@ -664,6 +691,102 @@ class Application(Frame):
         fp.write(ds)
         fp.close()
         return filterdata
+
+    def create_atm_form(self,rawdata):
+        n = len(rawdata)
+        calldata = []
+        putdata = []
+        for i in range(0, n, 2):
+            call = rawdata[i]
+            putd = rawdata[i + 1]
+            calldata.append(call)
+            putdata.append(putd)
+        return calldata,putdata
+
+    def calculate_atm(self, callrawdata, putrawdata):
+        n = len(callrawdata)
+
+        plusmidprice = []
+        submidprice = []
+        for i in range(0, n):
+            calldata = callrawdata[i]
+            putdata = putrawdata[i]
+            callprice = 0
+            putprice = 0
+            if calldata[5] == '-':
+                callprice = 99999
+            else:
+                callprice = float(calldata[5])
+
+            if putdata[5] == '-':
+                putprice = 99999
+            else:
+                putprice = float(putdata[5])
+
+            add = callprice + putprice
+            plusmidprice.append(add)
+
+            # when using sub condition, call - and put - will be zero, cause judge error, so fix it
+            if callprice == 99999 and putprice == 99999:
+                sub = 99999
+            else:
+                sub = abs(callprice - putprice)
+            submidprice.append(sub)
+        return plusmidprice,submidprice
+
+    def atm_decide(self, callprice,putprice):
+        return callprice.index(min(callprice)) ,putprice.index(min(putprice))
+
+    def atm_shift(self,callmid,putmid,callraw,putraw):
+        midpox = 0
+        putpox = 0
+
+        if self.atmWay.get() == 'plusAtm':
+            midpox = callmid
+            putpox = callmid
+        else:
+            midpox = putmid
+            putpox = putmid
+
+        if self.interval.get() == "interval":
+            if self.tm.get() == "ITM":
+                midpox -= int(self.priceVol.get()) * 1
+                putpox += int(self.priceVol.get()) * 1
+                #to do ,double Atm
+            else:
+                midpox += int(self.priceVol.get()) * 1
+                putpox -= int(self.priceVol.get()) * 1
+                # to do ,double Atm
+        else:
+            #find closest self.pointInterval from Atm
+            if self.tm.get() == "ITM":
+                target = int(float(callraw[midpox][3])) - int(self.pointInterval.get())
+                difflist = []
+                for i in range(0, midpox+1):
+                    difflist.append(abs(float(callraw[i][3]) - target))
+                midpox = difflist.index(min(difflist))
+
+                difflist = []
+                target = int(float(putraw[putpox][3])) + int(self.pointInterval.get())
+                n = len(putraw)
+                for i in range(putpox, n):
+                    difflist.append(abs(float(putraw[i][3]) - target))
+                putpox += difflist.index(min(difflist))
+            else:
+                target = int(float(callraw[midpox][3])) + int(self.pointInterval.get())
+                difflist = []
+                for i in range(0, midpox + 1):
+                    difflist.append(abs(float(callraw[i][3]) - target))
+                midpox = difflist.index(min(difflist))
+
+                difflist = []
+                target = int(float(putraw[putpox][3])) - int(self.pointInterval.get())
+                n = len(putraw)
+                for i in range(putpox, n):
+                    difflist.append(abs(float(putraw[i][3]) - target))
+                putpox += difflist.index(min(difflist))
+        return midpox,putpox
+
 
     def __init__(self, master=None):
         Frame.__init__(self, master)
