@@ -301,7 +301,13 @@ class Application(Frame):
                     doublePriceValue = i/2
                 if add < callminNum:
                     callminNum = add
-                sub = abs(callprice - putprice)
+
+                #when using sub condition, call - and put - will be zero, cause judge error, so fix it
+                if callprice == 99999 and putprice == 99999:
+                    sub = 99999
+                else:
+                    sub = abs(callprice - putprice)
+
                 submidprice.append(sub)
                 if sub == putminNum:
                     subminCnt += 1
