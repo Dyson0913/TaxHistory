@@ -125,6 +125,10 @@ class Application(Frame):
         c = Checkbutton(gSett, text="settle", variable=self.settleday)
         c.pack()
 
+        self.pickorder = IntVar()
+        d = Checkbutton(gSett, text="pick openning transaction", variable=self.pickorder)
+        d.pack()
+
         self.QUIT = Button(self)
         self.QUIT["text"] = "Gentxt"
         self.QUIT["fg"] = "red"
@@ -262,7 +266,8 @@ class Application(Frame):
                 else:
                     for row in secdata:
                         #wlist w4,w1,get w4, modify to get last
-                        depe = re.compile("(" + "\\d\\d\\d\\d\\d\\d)(W" + wlist[1] + ")")
+                        num = wlist[self.pickorder.get()]
+                        depe = re.compile("(" + "\\d\\d\\d\\d\\d\\d)(W" + num + ")")
                         Obj = depe.match(row[2])
                         if Obj != None:
                             semifinaldata.append(row)
