@@ -13,14 +13,6 @@ class Application(Frame):
 
     def createWidgets(self):
 
-        self.var = IntVar()
-        self.var.set(1)
-        c = Checkbutton(
-            self, text="TXO",
-            variable=self.var)
-
-        c.pack()
-
         group = LabelFrame(self, text="time", padx=5, pady=5)
         group.pack(padx=10, pady=10)
 
@@ -121,13 +113,20 @@ class Application(Frame):
         gSett.pack(padx=10, pady=10)
 
         self.settleday = IntVar()
-
         c = Checkbutton(gSett, text="settle", variable=self.settleday)
         c.pack()
 
         self.pickorder = IntVar()
         d = Checkbutton(gSett, text="pick openning transaction", variable=self.pickorder)
         d.pack()
+
+        Sett = LabelFrame(self, text="outRawData", padx=5, pady=5)
+        Sett.pack(padx=10, pady=10)
+        self.rawDataout = IntVar()
+        self.rawDataout.set(1)
+        e = Checkbutton(Sett, text="rawData", variable=self.rawDataout)
+        e.pack()
+
 
         self.QUIT = Button(self)
         self.QUIT["text"] = "Gentxt"
@@ -162,7 +161,7 @@ class Application(Frame):
         return True
 
     def parse(self):
-        #print "result ", self.var.get()
+
 
         year, month, mydate = self.datepare(self.databegin.get())
         eyear, emonth, emydate = self.datepare(self.dataend.get())
@@ -232,6 +231,7 @@ class Application(Frame):
             secdata = []
             path = ".\\data\\"+str(dateinfo)+"\\"+str(dateinfo)+".txt"
             f = open(path, 'rb')
+            #W1"" ,will just pick W1, ""W1, will pick ""W4
             for row in csv.reader(f):
                 #print row[2]
                 wjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
@@ -252,10 +252,15 @@ class Application(Frame):
                 elif prematchObj != None and prematchObj.group(2) == None:
                     #w3 only get like 201808 ,
                     if len(wlist) != 0:
-                        continue
+                        if self.settleday.get() == 1:
+                           pass
+                        else:
+                            continue
                     daymatch = str(dateinfo.year) + '{:02d}'.format(dateinfo.month)
                     if row[2].strip() == daymatch:
-                        secdata.append(row)
+                        if row[17] != '\xbdL\xab\xe1':
+                            secdata.append(row)
+
 
             f.close()
 
@@ -264,6 +269,7 @@ class Application(Frame):
             if len(wlist) > 0:
                 #w4 prejudge
                 if len(wlist) == 1:
+                    #2019/1/16  201901 first then201901W4
                     semifinaldata = self.filterw4(secdata)
                 else:
                     for row in secdata:
@@ -493,6 +499,10 @@ class Application(Frame):
 
         fp.close()
 
+        if self.rawDataout.get():
+            call, put = self.create_atm_form(semifinaldata)
+            self.OutputrawData(call,put)
+
 
 
     def saveFile(self):
@@ -532,31 +542,81 @@ class Application(Frame):
 
         hasw4 = False
         w4Cnt = 0;
+
+        #judget W2"" ,or ""W4
+        isWordfirst = False
+        orderjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
+        prematchObj = orderjudge.match(data[0][2])
+        if prematchObj.group(2) != None:
+            isWordfirst = True;
+
         for row in data:
-            # print row[2]
             wjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
             prematchObj = wjudge.match(row[2])
             #check is have w4
             if prematchObj != None and prematchObj.group(2) != None:
-                if prematchObj.group(3) == "4":
+                if prematchObj.group(3) == "4" or prematchObj.group(3) == "2":
                     hasw4 = True
                     w4Cnt +=1
 
+        #none settle W4' ' ,just return ,no need filter
         if hasw4 and (w4Cnt == len(data)):
             return data
 
         newW3 = [];
+
         if hasw4:
-            #filter W4 ,keep data like 201801
-            for row in data:
-                # print row[2]
-                wjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
-                prematchObj = wjudge.match(row[2])
-                # check is have w4
-                if prematchObj != None and prematchObj.group(2) == None:
-                    if row[17] == '\xa4@\xaf\xeb':
-                        newW3.append(row)
-            return newW3
+            if  self.settleday.get():
+                # decide pick first or last(W2"" ,or ""W4)
+                # want pick last
+                if self.pickorder.get():
+                    if isWordfirst:
+                        for row in data:
+                            wjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
+                            prematchObj = wjudge.match(row[2])
+                            #keep like 201801
+                            if prematchObj != None and prematchObj.group(2) == None:
+                                if row[17] == '\xa4@\xaf\xeb':
+                                    newW3.append(row)
+                        return newW3
+                    else:
+                        for row in data:
+                            wjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
+                            prematchObj = wjudge.match(row[2])
+                            # keep like 201801W2
+                            if prematchObj != None and prematchObj.group(2) != None:
+                                if row[17] == '\xa4@\xaf\xeb':
+                                    newW3.append(row)
+                        return newW3
+                else:
+                    if isWordfirst:
+                        for row in data:
+                            wjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
+                            prematchObj = wjudge.match(row[2])
+                            # keep like 201801W2
+                            if prematchObj != None and prematchObj.group(2) != None:
+                                if row[17] == '\xa4@\xaf\xeb':
+                                    newW3.append(row)
+                        return newW3
+                    else:
+                        for row in data:
+                            wjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
+                            prematchObj = wjudge.match(row[2])
+                            #keep like 201801
+                            if prematchObj != None and prematchObj.group(2) == None:
+                                if row[17] == '\xa4@\xaf\xeb':
+                                    newW3.append(row)
+                        return newW3
+            else:
+                #filter W4 ,keep data like 201801
+                for row in data:
+                    wjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
+                    prematchObj = wjudge.match(row[2])
+                    # check is have w4
+                    if prematchObj != None and prematchObj.group(2) == None:
+                        if row[17] == '\xa4@\xaf\xeb':
+                            newW3.append(row)
+                return newW3
         return data
 
     def adjustWiredmidprice(self,midprice,pluslist,sublist,type):
@@ -594,11 +654,8 @@ class Application(Frame):
     def settledays(self):
         year, month, mydate = self.datepare(self.databegin.get())
         eyear, emonth, emydate = self.datepare(self.dataend.get())
-        #month = 10
-        #emonth =10
-        my_data = {'_all': "on",'start_year': year, 'start_month': '{:02d}'.format(month), 'end_year': eyear, 'end_month': '{:02d}'.format(emonth),
-                   'COMMODITY_ID': 2}
-        # print my_data
+        my_data = {'_all': "on",'start_year': year, 'start_month': '{:02d}'.format(month), 'end_year': eyear, 'end_month': '{:02d}'.format(emonth),'COMMODITY_ID': 2}
+
         #r = requests.post('http://www.taifex.com.tw/cht/5/FutIndxFSP.asp', data=my_data)
         r = requests.post('https://www.taifex.com.tw/cht/5/optIndxFSP', data=my_data)
 
@@ -655,7 +712,8 @@ class Application(Frame):
         print newfilter
         if len(newfilter) != 0:
             self.grabDays = newfilter
-
+        else:
+            return 1
         return 0
 
     def grabNewsettledays(self):
@@ -799,6 +857,33 @@ class Application(Frame):
                     difflist.append(abs(float(putraw[i][3]) - target))
                 putpox += difflist.index(min(difflist))
         return midpox,putpox
+
+    def OutputrawData(self,call,put):
+        finalds = []
+
+        n = len(call)
+        for i in range(0,n):
+            findata = []
+            findata.append(call[i][5])
+            findata.append(call[i][6])
+            findata.append(call[i][7])
+            findata.append(call[i][8])
+            findata.append(call[i][3])
+
+            findata.append(put[i][5])
+            findata.append(put[i][6])
+            findata.append(put[i][7])
+            findata.append(put[i][8])
+            ds = ",".join(findata)
+            ds += "\r\n"
+            finalds.append(ds)
+
+        fp = open(".\\" + "rawData" + ".txt", "wb")
+        for item in finalds:
+            fp.write(item)
+
+        fp.close()
+
 
 
     def __init__(self, master=None):
