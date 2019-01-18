@@ -197,7 +197,9 @@ class Application(Frame):
             self.grabDays.append(newday)
 
         #if check settle , just parse filter day
-        self.settlefilter()
+        if self.settlefilter():
+            self.errorMsg("settle day error occurred!! check data/settle.txt for more infomation")
+            return
 
         #save file
         self.stateS.set("start = grab data....")
@@ -594,10 +596,12 @@ class Application(Frame):
         eyear, emonth, emydate = self.datepare(self.dataend.get())
         #month = 10
         #emonth =10
-        my_data = {'syear': year, 'smonth': '{:02d}'.format(month), 'eyear': eyear, 'emonth': '{:02d}'.format(emonth),
-                   'COMMODITY_ID': 1}
+        my_data = {'_all': "on",'start_year': year, 'start_month': '{:02d}'.format(month), 'end_year': eyear, 'end_month': '{:02d}'.format(emonth),
+                   'COMMODITY_ID': 2}
         # print my_data
-        r = requests.post('http://www.taifex.com.tw/chinese/5/FutIndxFSP.asp', data=my_data)
+        #r = requests.post('http://www.taifex.com.tw/cht/5/FutIndxFSP.asp', data=my_data)
+        r = requests.post('https://www.taifex.com.tw/cht/5/optIndxFSP', data=my_data)
+
         self.stateS.set("grab data ")
         soup = BeautifulSoup(r.content, 'html.parser')
         table = soup.find('table', {'class': 'table_c'})
@@ -631,15 +635,15 @@ class Application(Frame):
 
     def settlefilter(self):
         if self.settleday.get() == 0:
-            return
+            return 0
 
-        #filterdate = self.settledays()
-        filterdate = self.grabNewsettledays()
+        filterdate = self.settledays()
+        #filterdate = self.grabNewsettledays()
 
 
         #if filterdate == None, want settle day and settle day can't grab, not handle
         if filterdate is None:
-            return
+            return 1
 
         newfilter = []
         for dateinfo in self.grabDays:
@@ -652,11 +656,14 @@ class Application(Frame):
         if len(newfilter) != 0:
             self.grabDays = newfilter
 
+        return 0
+
     def grabNewsettledays(self):
         year, month, mydate = self.datepare(self.databegin.get())
         eyear, emonth, emydate = self.datepare(self.dataend.get())
         my_data = {'start_year': year, 'start_month': '{:02d}'.format(month), 'end_year': eyear, 'end_month': '{:02d}'.format(emonth),'dlFileType':3}
         r = requests.post('https://www.taifex.com.tw/cht/5/fSPDataDown.asp', data=my_data)
+
 
         #print r.status_code
         #print len(r.content)
@@ -687,6 +694,7 @@ class Application(Frame):
         for row in csv.reader(f):
             if row[2] == 'TXO':
                 filterdata.append(row[0])
+
 
         ds = ",".join(filterdata)
         ds += "\r\n"
