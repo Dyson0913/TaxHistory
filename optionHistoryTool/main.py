@@ -418,7 +418,7 @@ class Application(Frame):
                 # poick idx of call and put
                 calldataidx, putdataidx = self.atm_shift(callidx, putidx, call, put)
                 midpox = calldataidx*2
-                putpox = putdataidx*2
+                putpox = putdataidx*2 +1
 
             data = semifinaldata[midpox]
             data2 = None
@@ -492,6 +492,9 @@ class Application(Frame):
             return
 
         finalfileName = "week" + "_" + self.tm.get() + "_" + self.atmWay.get() + "_" + self.priceVol.get()
+
+        if self.interval.get() == "point":
+            finalfileName += "_" + self.pointInterval.get()
         fp = open(".\\" + finalfileName + ".txt", "wb")
         finalds.reverse()
         for item in finalds:

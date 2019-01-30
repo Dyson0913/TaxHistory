@@ -47,25 +47,25 @@
     <session id="935175143">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="35" />
+          <entry key="project.closed" value="38" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.5" value="2" />
-          <entry key="project.open.time.6" value="3" />
+          <entry key="project.open.time.6" value="6" />
           <entry key="project.open.time.7" value="19" />
           <entry key="project.open.time.8" value="8" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="35" />
+          <entry key="project.opened" value="38" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="7213" />
+          <entry key="py" value="7237" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="7213" />
+          <entry key="Python" value="7237" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -85,19 +85,19 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1352">
-              <caret line="857" selection-start-line="857" selection-end-line="857" />
+            <state relative-caret-position="235">
+              <caret line="496" column="35" selection-start-line="496" selection-start-column="35" selection-end-line="496" selection-end-column="35" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
-                <marker date="1548829209257" expanded="true" signature="170:175" ph="..." />
-                <marker date="1548829209257" expanded="true" signature="4239:4244" ph="..." />
-                <marker date="1548829209257" expanded="true" signature="4267:4865" ph="..." />
-                <marker date="1548829209257" expanded="true" signature="4559:4565" ph="..." />
-                <marker date="1548829209257" expanded="false" signature="4602:4611" ph="..." />
-                <marker date="1548829209257" expanded="true" signature="4602:4865" ph="..." />
-                <marker date="1548829209257" expanded="true" signature="4881:4882" ph="..." />
-                <marker date="1548829209257" expanded="true" signature="23373:23374" ph="..." />
-                <marker date="1548829209257" expanded="true" signature="24777:31185" ph="..." />
+                <marker date="1548831973280" expanded="true" signature="170:175" ph="..." />
+                <marker date="1548831973280" expanded="true" signature="4239:4244" ph="..." />
+                <marker date="1548831973280" expanded="true" signature="4267:4865" ph="..." />
+                <marker date="1548831973280" expanded="true" signature="4559:4565" ph="..." />
+                <marker date="1548831973280" expanded="false" signature="4602:4611" ph="..." />
+                <marker date="1548831973280" expanded="true" signature="4602:4865" ph="..." />
+                <marker date="1548831973280" expanded="true" signature="4881:4882" ph="..." />
+                <marker date="1548831973280" expanded="true" signature="23480:23481" ph="..." />
+                <marker date="1548831973280" expanded="true" signature="24884:31292" ph="..." />
               </folding>
             </state>
           </provider>
@@ -135,6 +135,10 @@
       <find>self.pickorder</find>
       <find>self.settleday</find>
       <find>adjustWiredmidprice</find>
+      <find>atm_shift</find>
+      <find>self.interval.set</find>
+      <find>self.interval</find>
+      <find>self.pointInterval</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -159,6 +163,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -187,7 +192,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -354,48 +358,28 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>697</line>
+          <line>700</line>
           <option name="timeStamp" value="61" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>751</line>
+          <line>754</line>
           <option name="timeStamp" value="62" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>722</line>
+          <line>725</line>
           <option name="timeStamp" value="63" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>599</line>
+          <line>602</line>
           <option name="timeStamp" value="92" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>608</line>
+          <line>611</line>
           <option name="timeStamp" value="94" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>268</line>
-          <option name="timeStamp" value="98" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>289</line>
-          <option name="timeStamp" value="99" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>347</line>
-          <option name="timeStamp" value="100" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>410</line>
-          <option name="timeStamp" value="101" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -456,19 +440,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1352">
-          <caret line="857" selection-start-line="857" selection-end-line="857" />
+        <state relative-caret-position="235">
+          <caret line="496" column="35" selection-start-line="496" selection-start-column="35" selection-end-line="496" selection-end-column="35" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-            <marker date="1548829209257" expanded="true" signature="170:175" ph="..." />
-            <marker date="1548829209257" expanded="true" signature="4239:4244" ph="..." />
-            <marker date="1548829209257" expanded="true" signature="4267:4865" ph="..." />
-            <marker date="1548829209257" expanded="true" signature="4559:4565" ph="..." />
-            <marker date="1548829209257" expanded="false" signature="4602:4611" ph="..." />
-            <marker date="1548829209257" expanded="true" signature="4602:4865" ph="..." />
-            <marker date="1548829209257" expanded="true" signature="4881:4882" ph="..." />
-            <marker date="1548829209257" expanded="true" signature="23373:23374" ph="..." />
-            <marker date="1548829209257" expanded="true" signature="24777:31185" ph="..." />
+            <marker date="1548831973280" expanded="true" signature="170:175" ph="..." />
+            <marker date="1548831973280" expanded="true" signature="4239:4244" ph="..." />
+            <marker date="1548831973280" expanded="true" signature="4267:4865" ph="..." />
+            <marker date="1548831973280" expanded="true" signature="4559:4565" ph="..." />
+            <marker date="1548831973280" expanded="false" signature="4602:4611" ph="..." />
+            <marker date="1548831973280" expanded="true" signature="4602:4865" ph="..." />
+            <marker date="1548831973280" expanded="true" signature="4881:4882" ph="..." />
+            <marker date="1548831973280" expanded="true" signature="23480:23481" ph="..." />
+            <marker date="1548831973280" expanded="true" signature="24884:31292" ph="..." />
           </folding>
         </state>
       </provider>
