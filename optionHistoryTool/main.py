@@ -846,16 +846,16 @@ class Application(Frame):
             else:
                 target = int(float(callraw[midpox][3])) + int(self.pointInterval.get())
                 difflist = []
-                for i in range(0, midpox + 1):
+                n = len(putraw)
+                for i in range(midpox, n):
                     difflist.append(abs(float(callraw[i][3]) - target))
-                midpox = difflist.index(min(difflist))
+                midpox += difflist.index(min(difflist))
 
                 difflist = []
                 target = int(float(putraw[putpox][3])) - int(self.pointInterval.get())
-                n = len(putraw)
-                for i in range(putpox, n):
+                for i in range(0, putpox+1):
                     difflist.append(abs(float(putraw[i][3]) - target))
-                putpox += difflist.index(min(difflist))
+                putpox = difflist.index(min(difflist))
         return midpox,putpox
 
     def OutputrawData(self,call,put):
