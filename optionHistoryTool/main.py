@@ -447,12 +447,16 @@ class Application(Frame):
             findata.append(data[6])
             findata.append(data[7])
             findata.append(data[8])
+            findata.append(data[14])
+            findata.append(data[15])
 
             findata.append(putdata[3])
             findata.append(putdata[5])
             findata.append(putdata[6])
             findata.append(putdata[7])
             findata.append(putdata[8])
+            findata.append(putdata[14])
+            findata.append(putdata[15])
 
             print findata
 
@@ -465,12 +469,16 @@ class Application(Frame):
                 findata2.append(data2[6])
                 findata2.append(data2[7])
                 findata2.append(data2[8])
+                findata2.append(data2[14])
+                findata2.append(data2[15])
 
                 findata2.append(putSecdata[3])
                 findata2.append(putSecdata[5])
                 findata2.append(putSecdata[6])
                 findata2.append(putSecdata[7])
                 findata2.append(putSecdata[8])
+                findata2.append(putSecdata[14])
+                findata2.append(putSecdata[15])
 
             if outSec:
                 dds = ",".join(findata2)
@@ -877,12 +885,18 @@ class Application(Frame):
             findata.append(call[i][6])
             findata.append(call[i][7])
             findata.append(call[i][8])
+            findata.append(call[i][14])
+            findata.append(call[i][15])
             findata.append(call[i][3])
+
 
             findata.append(put[i][5])
             findata.append(put[i][6])
             findata.append(put[i][7])
             findata.append(put[i][8])
+            findata.append(put[i][14])
+            findata.append(put[i][15])
+
             ds = ",".join(findata)
             ds += "\r\n"
             finalds.append(ds)
