@@ -225,7 +225,6 @@ class Application(Frame):
             f = open(path, 'rb')
             #W1"" ,will just pick W1, ""W1, will pick ""W4
             for row in csv.reader(f):
-                print row[2]
                 wjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
                 prematchObj = wjudge.match(row[2])
 
@@ -631,7 +630,7 @@ class Application(Frame):
             prematchObj = wjudge.match(row[2])
             #check is have w4
             if prematchObj != None and prematchObj.group(2) != None:
-                if prematchObj.group(3) == "4" or prematchObj.group(3) == "2":
+                if prematchObj.group(3) == "4" or prematchObj.group(3) == "2" or prematchObj.group(3) == "1":
                     hasw4 = True
                     w4Cnt +=1
 
