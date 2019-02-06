@@ -14,7 +14,7 @@ class Application(Frame):
     def createWidgets(self):
 
         group = LabelFrame(self, text="time", padx=5, pady=5)
-        group.pack(padx=10, pady=10)
+        group.pack(padx=5, pady=5)
 
         w = Label(group, text="data_Start")
         w.grid(row=0, column=1)
@@ -37,28 +37,8 @@ class Application(Frame):
         self.dataend.grid(row=1, column=1)
         self.dataend.pack(side=LEFT)
 
-        dg = LabelFrame(self, text="week(pick target day)", padx=5, pady=5)
-        dg.pack(side=LEFT,padx=10, pady=10)
-
-        #MODES = [
-        #    ("0", "0"),
-        #    ("1", "1"),
-        #    ("2", "2"),
-        #    ("3", "3"),
-        #    ("4", "4"),
-        #    ("5", "5"),
-        #    ("6", "6"),
-        #]
-        #self.dayV = StringVar()
-        #self.dayV.set("0")  # initialize
-
-        #for text, mode in MODES:
-        #    b = Radiobutton(dg, text=text,
-        #                    variable=self.dayV, value=mode)
-        #    b.pack(anchor=W)
-
         ig = LabelFrame(self, text="ITM OTM", padx=5, pady=5)
-        ig.pack(padx=10, pady=10)
+        ig.pack(side=LEFT,padx=10, pady=10)
         MODES = [
             ("ITM", "ITM"),
             ("OTM", "OTM"),
@@ -71,8 +51,22 @@ class Application(Frame):
                             variable=self.tm, value=mode)
             b.pack(anchor=W)
 
+        ag = LabelFrame(self, text="OP or CP", padx=5, pady=5)
+        ag.pack(side=LEFT, padx=10, pady=10)
+        MODES = [
+            ("OpenPrice", "OpenPrice"),
+            ("ClosePrice", "ClosePrice"),
+        ]
+        self.OPorCP = StringVar()
+        self.OPorCP.set("OpenPrice")  # initialize
+
+        for text, mode in MODES:
+            b = Radiobutton(ag, text=text,
+                            variable=self.OPorCP, value=mode)
+            b.pack(anchor=W)
+
         gb = LabelFrame(self, text="Atm(plus or sub)", padx=5, pady=5)
-        gb.pack(padx=10, pady=10)
+        gb.pack(side=LEFT,padx=10, pady=10)
 
         MODES = [
             ("plusAtm", "plusAtm"),
@@ -311,16 +305,16 @@ class Application(Frame):
                 putdata = semifinaldata[i+1]
                 callprice = 0
                 putprice = 0
-                if calldata[5] == '-':
+                if calldata[self.OpenOrClose()] == '-':
                     callprice = 99999
                 else:
-                    callprice = float(calldata[5])
+                    callprice = float(calldata[self.OpenOrClose()])
                 callplist.append(callprice)
 
-                if putdata[5] == '-':
+                if putdata[self.OpenOrClose()] == '-':
                     putprice = 99999
                 else:
-                    putprice = float(putdata[5])
+                    putprice = float(putdata[self.OpenOrClose()])
                 putplist.append(putprice)
                     #callsortvalue = callprice - 0.1
 
@@ -787,15 +781,15 @@ class Application(Frame):
             putdata = putrawdata[i]
             callprice = 0
             putprice = 0
-            if calldata[5] == '-':
+            if calldata[self.OpenOrClose()] == '-':
                 callprice = 99999
             else:
-                callprice = float(calldata[5])
+                callprice = float(calldata[self.OpenOrClose()])
 
-            if putdata[5] == '-':
+            if putdata[self.OpenOrClose()] == '-':
                 putprice = 99999
             else:
-                putprice = float(putdata[5])
+                putprice = float(putdata[self.OpenOrClose()])
 
             add = callprice + putprice
             plusmidprice.append(add)
@@ -835,31 +829,43 @@ class Application(Frame):
             #find closest self.pointInterval from Atm
             if self.tm.get() == "ITM":
                 target = int(float(callraw[midpox][3])) - int(self.pointInterval.get())
-                difflist = []
+                pick = 0
                 for i in range(0, midpox+1):
-                    difflist.append(abs(float(callraw[i][3]) - target))
-                midpox = difflist.index(min(difflist))
+                    if int(float(callraw[i][3])) >= target:
+                        pick = i
+                        break
+                midpox = pick
 
-                difflist = []
                 target = int(float(putraw[putpox][3])) + int(self.pointInterval.get())
                 n = len(putraw)
-                for i in range(putpox, n):
-                    difflist.append(abs(float(putraw[i][3]) - target))
-                putpox += difflist.index(min(difflist))
+                for i in range(n-1,putpox,-1):
+                    if int(float(putraw[i][3])) <= target:
+                        pick = i
+                        break
+                putpox = pick
             else:
                 target = int(float(callraw[midpox][3])) + int(self.pointInterval.get())
-                difflist = []
+                pick = 0
                 n = len(putraw)
-                for i in range(midpox, n):
-                    difflist.append(abs(float(callraw[i][3]) - target))
-                midpox += difflist.index(min(difflist))
+                for i in range(n-1,midpox, -1):
+                    if int(float(callraw[i][3])) <= target:
+                        pick = i
+                        break
+                midpox = pick
 
-                difflist = []
                 target = int(float(putraw[putpox][3])) - int(self.pointInterval.get())
                 for i in range(0, putpox+1):
-                    difflist.append(abs(float(putraw[i][3]) - target))
-                putpox = difflist.index(min(difflist))
+                    if int(float(putraw[i][3])) >= target:
+                        pick = i
+                        break
+                putpox = pick
+
         return midpox,putpox
+
+    def OpenOrClose(self):
+        if self.OPorCP.get() == "OpenPrice":
+            return 5
+        return 8
 
     def OutputrawData(self,call,put):
         finalds = []
