@@ -211,8 +211,6 @@ class Application(Frame):
         for dateinfo in self.grabDays:
             #day filter
             weekday = datetime.datetime(dateinfo.year, dateinfo.month, dateinfo.day).strftime("%w")
-            #if self.dayV.get() != weekday:
-            #    continue
 
             today = str(dateinfo.year) + '/' + '{:02d}'.format(dateinfo.month) + "/" + '{:02d}'.format(dateinfo.day)
             # folder not exits, continue
@@ -227,7 +225,7 @@ class Application(Frame):
             f = open(path, 'rb')
             #W1"" ,will just pick W1, ""W1, will pick ""W4
             for row in csv.reader(f):
-                #print row[2]
+                print row[2]
                 wjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
                 prematchObj = wjudge.match(row[2])
 
@@ -259,12 +257,20 @@ class Application(Frame):
             f.close()
 
             semifinaldata =[]
+            #for settle openPrice,get last week settle like, 2013/1/2's settle will be front of 2013/1/9
+            settlePartdata = []
             #del old w
             if len(wlist) > 0:
                 #w4 prejudge
                 if len(wlist) == 1:
                     #2019/1/16  201901 first then201901W4
                     semifinaldata = self.filterw4(secdata)
+
+                    # settle data ,filter form secdata
+                    if self.settleday.get() and self.pickorder.get():
+                        settlePartdata = self.filterExcusivePart(secdata,semifinaldata);
+
+
                 else:
                     for row in secdata:
                         #wlist w4,w1,get w4, modify to get last
@@ -273,6 +279,17 @@ class Application(Frame):
                         Obj = depe.match(row[2])
                         if Obj != None:
                             semifinaldata.append(row)
+                        else:
+                            rest_num = 0
+                            if self.pickorder.get() == 1:
+                                rest_num = 0
+                            else:
+                                rest_num = 1
+                            rest_num = wlist[rest_num]
+                            depe2 = re.compile("(" + "\\d\\d\\d\\d\\d\\d)(W" + rest_num + ")")
+                            Obj2 = depe2.match(row[2])
+                            if Obj2 != None:
+                                settlePartdata.append(row)
             else:
                 #w3 only keep "normal data", not after pan data
                 for row in secdata:
@@ -422,11 +439,6 @@ class Application(Frame):
 
             print "call " + str(data)
 
-
-            print n
-            print putpox
-            print len(semifinaldata)
-
             if putpox > getpo or putpox < 0:
                 continue
             putdata = semifinaldata[putpox]
@@ -489,6 +501,15 @@ class Application(Frame):
             ds +="\r\n"
             finalds.append(ds)
 
+            # settle data
+            if self.settleday and self.pickorder.get():
+                n = self.grabDays.index(dateinfo)
+                if n != (len(self.grabDays) - 1):
+                    findata3 = self.settlePartdata(settlePartdata, weekday)
+                    dds = ",".join(findata3)
+                    dds += "\r\n"
+                    finalds.append(dds)
+
         if len(finalds) == 0:
             self.errorMsg("no match data ,not out put file")
             return
@@ -509,6 +530,56 @@ class Application(Frame):
             self.OutputrawData(call,put)
 
 
+    def filterExcusivePart(self,allpart,pickpart):
+        n = len(pickpart)
+        for i in range(0,n):
+            re = allpart.index(pickpart[i])
+            allpart.remove(allpart[re])
+
+        return  allpart
+
+    def settlePartdata(self,settledata,weekday):
+        if self.interval.get() == "point":
+            # get callrawdata and putrawdata
+            call, put = self.create_atm_form(settledata)
+            # add and sub call and put
+            plusprice, subprice = self.calculate_atm(call, put)
+            # decide callAtm and putAtm
+            callidx, putidx = self.atm_decide(plusprice, subprice)
+            # poick idx of call and put
+            calldataidx, putdataidx = self.atm_shift(callidx, putidx, call, put)
+            midpox = calldataidx * 2
+            putpox = putdataidx * 2 + 1
+
+        data = settledata[midpox]
+        print "call " + str(data)
+
+        putdata = settledata[putpox]
+        print "put " + str(putdata)
+
+        if weekday == "0":
+            weekday = "7"
+
+        findata = []
+        findata.append(data[0])
+        findata.append(weekday)
+        findata.append(data[3])
+        findata.append(data[5])
+        findata.append(data[6])
+        findata.append(data[7])
+        findata.append(data[8])
+        findata.append(data[14])
+        findata.append(data[15])
+
+        findata.append(putdata[3])
+        findata.append(putdata[5])
+        findata.append(putdata[6])
+        findata.append(putdata[7])
+        findata.append(putdata[8])
+        findata.append(putdata[14])
+        findata.append(putdata[15])
+
+        return findata
 
     def saveFile(self):
 
