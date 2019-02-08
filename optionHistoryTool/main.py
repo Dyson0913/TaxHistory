@@ -515,8 +515,6 @@ class Application(Frame):
             finalds.reverse()
             merge.append(finalds.pop(0))
             settlePart = self.settlePick(settleRawData)
-            settlePart.reverse()
-            settlePart.pop(0)
             n = len(settlePart)
 
             for i in range(0,n):
@@ -594,10 +592,11 @@ class Application(Frame):
 
     def settlePick(self,RawSettle):
         n = len(RawSettle)
+        RawSettle.reverse()
         finalds = []
-        for i in range(0,n):
+        for i in range(0,n-1):
             raw = RawSettle[i]
-            findata3 = self.settlePickSamePrice(raw[0], raw[1], raw[2], raw[3])
+            findata3 = self.settlePickSamePrice(RawSettle[i+1][0], raw[1], raw[2], raw[3])
             dds = ",".join(findata3)
             dds += "\r\n"
             finalds.append(dds)
