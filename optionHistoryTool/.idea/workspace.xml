@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/main.py" line="997" />
+    <bookmark url="file://$PROJECT_DIR$/main.py" line="1022" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fec4cfef-b197-4100-b972-b9abfb00c7f9" name="Default" comment="" />
@@ -56,71 +56,63 @@
           <entry key="project.open.time.5" value="2" />
           <entry key="project.open.time.6" value="7" />
           <entry key="project.open.time.7" value="20" />
-          <entry key="project.open.time.8" value="11" />
+          <entry key="project.open.time.8" value="12" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="43" />
+          <entry key="project.opened" value="44" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="8555" />
+          <entry key="py" value="9092" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="8555" />
+          <entry key="Python" value="9092" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="25" />
+          <entry key="py" value="28" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Python" value="25" />
+          <entry key="Python" value="28" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="356">
-              <caret line="600" column="25" selection-start-line="600" selection-start-column="25" selection-end-line="600" selection-end-column="25" />
+            <state relative-caret-position="37">
+              <caret line="515" column="40" lean-forward="true" selection-start-line="515" selection-start-column="40" selection-end-line="515" selection-end-column="40" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
-                <element signature="e#19138#20463#0" />
-                <element signature="e#33910#34727#0" />
-                <marker date="1549617240352" expanded="true" signature="170:175" ph="..." />
-                <marker date="1549617240352" expanded="true" signature="4157:4162" ph="..." />
-                <marker date="1549617240352" expanded="true" signature="4185:4783" ph="..." />
-                <marker date="1549617240352" expanded="true" signature="4477:4483" ph="..." />
-                <marker date="1549617240352" expanded="false" signature="4520:4529" ph="..." />
-                <marker date="1549617240352" expanded="true" signature="4520:4783" ph="..." />
-                <marker date="1549617240352" expanded="true" signature="4799:4800" ph="..." />
-                <marker date="1549617240352" expanded="true" signature="20561:22050" ph="..." />
+                <element signature="e#19162#20487#0" />
+                <element signature="e#20570#22044#0" />
+                <marker date="1549635576699" expanded="true" signature="170:175" ph="..." />
+                <marker date="1549635576699" expanded="true" signature="4157:4162" ph="..." />
+                <marker date="1549635576699" expanded="true" signature="4185:4783" ph="..." />
+                <marker date="1549635576699" expanded="true" signature="4477:4483" ph="..." />
+                <marker date="1549635576699" expanded="false" signature="4520:4529" ph="..." />
+                <marker date="1549635576699" expanded="true" signature="4520:4783" ph="..." />
+                <marker date="1549635576699" expanded="true" signature="4799:4800" ph="..." />
+                <marker date="1549635576699" expanded="true" signature="20798:21111" ph="..." />
+                <marker date="1549635576699" expanded="true" signature="21179:22669" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="212">
+            <state relative-caret-position="412">
               <caret line="1067" selection-start-line="1067" selection-end-line="1067" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://C:/Python27/Lib/lib-tk/Tkinter.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="9300">
-              <caret line="372" selection-start-line="372" selection-end-line="372" />
             </state>
           </provider>
         </entry>
@@ -136,8 +128,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>最後結算日</find>
-      <find>continue</find>
       <find>addminCnt</find>
       <find>errorMsg</find>
       <find>#filterdate = self.settledays()</find>
@@ -151,7 +141,6 @@
       <find>self.var</find>
       <find>finalds</find>
       <find>filterw4</find>
-      <find>self.settleday</find>
       <find>adjustWiredmidprice</find>
       <find>atm_shift</find>
       <find>self.interval.set</find>
@@ -166,6 +155,9 @@
       <find>self.pickorder</find>
       <find>filterExcusivePart</find>
       <find>settlePartdata</find>
+      <find>shift</find>
+      <find>pop</find>
+      <find>self.settleday</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -179,7 +171,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-11" />
     <option name="y" value="16" />
     <option name="width" value="1934" />
@@ -198,23 +190,6 @@
             <path>
               <item name="optionHistoryTool" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-            <path>
-              <item name="optionHistoryTool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 2.7 (optionHistoryTool) (1) &gt;" type="70bed36:NamedLibraryElementNode" />
-            </path>
-            <path>
-              <item name="optionHistoryTool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 2.7 (optionHistoryTool) (1) &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="-762174762" type="70582d5e:PySkeletonsNode" />
-            </path>
-            <path>
-              <item name="optionHistoryTool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 2.7 (optionHistoryTool) (1) &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="Typeshed Stubs" type="9c07c3ae:PyTypeShedNode" />
             </path>
           </expand>
           <select />
@@ -352,6 +327,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20126449" />
       <window_info id="Structure" order="1" weight="0.25" />
@@ -359,12 +335,12 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49367756" weight="0.26681128" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.22125813" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.22125813" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.329718" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.4947313" visible="true" weight="0.2570499" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4947313" weight="0.2570499" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50632244" side_tool="true" weight="0.23427331" />
       <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.49736565" weight="0.3286334" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -381,33 +357,23 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>512</line>
-          <option name="timeStamp" value="54" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>825</line>
+          <line>850</line>
           <option name="timeStamp" value="61" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>879</line>
+          <line>904</line>
           <option name="timeStamp" value="62" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>850</line>
+          <line>875</line>
           <option name="timeStamp" value="63" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>727</line>
-          <option name="timeStamp" value="92" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>736</line>
-          <option name="timeStamp" value="94" />
+          <line>551</line>
+          <option name="timeStamp" value="95" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -421,13 +387,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="19950">
           <caret line="831" selection-start-line="831" selection-end-line="831" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-762174762/__builtin__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1047">
-          <caret line="3350" column="8" selection-start-line="3350" selection-start-column="8" selection-end-line="3350" selection-end-column="8" />
         </state>
       </provider>
     </entry>
@@ -459,30 +418,38 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-762174762/__builtin__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="600" column="25" selection-start-line="600" selection-start-column="25" selection-end-line="600" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-            <element signature="e#19138#20463#0" />
-            <element signature="e#33910#34727#0" />
-            <marker date="1549617240352" expanded="true" signature="170:175" ph="..." />
-            <marker date="1549617240352" expanded="true" signature="4157:4162" ph="..." />
-            <marker date="1549617240352" expanded="true" signature="4185:4783" ph="..." />
-            <marker date="1549617240352" expanded="true" signature="4477:4483" ph="..." />
-            <marker date="1549617240352" expanded="false" signature="4520:4529" ph="..." />
-            <marker date="1549617240352" expanded="true" signature="4520:4783" ph="..." />
-            <marker date="1549617240352" expanded="true" signature="4799:4800" ph="..." />
-            <marker date="1549617240352" expanded="true" signature="20561:22050" ph="..." />
-          </folding>
+        <state relative-caret-position="385">
+          <caret line="3350" column="8" selection-start-line="3350" selection-start-column="8" selection-end-line="3350" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
+        <state relative-caret-position="412">
           <caret line="1067" selection-start-line="1067" selection-end-line="1067" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="37">
+          <caret line="515" column="40" lean-forward="true" selection-start-line="515" selection-start-column="40" selection-end-line="515" selection-end-column="40" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#19162#20487#0" />
+            <element signature="e#20570#22044#0" />
+            <marker date="1549635576699" expanded="true" signature="170:175" ph="..." />
+            <marker date="1549635576699" expanded="true" signature="4157:4162" ph="..." />
+            <marker date="1549635576699" expanded="true" signature="4185:4783" ph="..." />
+            <marker date="1549635576699" expanded="true" signature="4477:4483" ph="..." />
+            <marker date="1549635576699" expanded="false" signature="4520:4529" ph="..." />
+            <marker date="1549635576699" expanded="true" signature="4520:4783" ph="..." />
+            <marker date="1549635576699" expanded="true" signature="4799:4800" ph="..." />
+            <marker date="1549635576699" expanded="true" signature="20798:21111" ph="..." />
+            <marker date="1549635576699" expanded="true" signature="21179:22669" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>

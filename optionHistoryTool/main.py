@@ -207,7 +207,7 @@ class Application(Frame):
         stopdayname = '0'
         finalfileName = ""
         finalds = []
-
+        settleRawData = []
         for dateinfo in self.grabDays:
             #day filter
             weekday = datetime.datetime(dateinfo.year, dateinfo.month, dateinfo.day).strftime("%w")
@@ -491,7 +491,7 @@ class Application(Frame):
                 findata2.append(putSecdata[14])
                 findata2.append(putSecdata[15])
 
-            if outSec:
+            if outSec and self.settleday.get() == 0:
                 dds = ",".join(findata2)
                 dds += "\r\n"
                 finalds.append(dds)
@@ -500,26 +500,38 @@ class Application(Frame):
             ds +="\r\n"
             finalds.append(ds)
 
-            # settle data
-            if self.settleday and self.pickorder.get():
-                n = self.grabDays.index(dateinfo)
-                if n != (len(self.grabDays) - 1):
-                    findata3 = self.settlePickSamePrice(settlePartdata, weekday,data[3],putdata[3])
-                    dds = ",".join(findata3)
-                    dds += "\r\n"
-                    finalds.append(dds)
+            # settle data save ,pick and merge later
+            if self.settleday.get() and self.pickorder.get():
+                settleRawData.append([settlePartdata,weekday,data[3],putdata[3]])
+
 
         if len(finalds) == 0:
             self.errorMsg("no match data ,not out put file")
             return
+
+        #mereg pick settle
+        merge = []
+        if self.settleday.get() and self.pickorder.get():
+            finalds.reverse()
+            merge.append(finalds.pop(0))
+            settlePart = self.settlePick(settleRawData)
+            settlePart.reverse()
+            settlePart.pop(0)
+            n = len(settlePart)
+
+            for i in range(0,n):
+
+                merge.append(settlePart[i])
+                merge.append(finalds[i])
+
 
         finalfileName = "week" + "_" + self.tm.get() + "_" + self.atmWay.get() + "_" + self.priceVol.get()
 
         if self.interval.get() == "point":
             finalfileName += "_" + self.pointInterval.get()
         fp = open(".\\" + finalfileName + ".txt", "wb")
-        finalds.reverse()
-        for item in finalds:
+
+        for item in merge:
             fp.write(item)
 
         fp.close()
@@ -580,6 +592,18 @@ class Application(Frame):
 
         return findata
 
+    def settlePick(self,RawSettle):
+        n = len(RawSettle)
+        finalds = []
+        for i in range(0,n):
+            raw = RawSettle[i]
+            findata3 = self.settlePickSamePrice(raw[0], raw[1], raw[2], raw[3])
+            dds = ",".join(findata3)
+            dds += "\r\n"
+            finalds.append(dds)
+
+        return finalds
+
     def settlePickSamePrice(self,settledata,weekday,callPrice,putPrice):
         if self.interval.get() == "point":
             # get callrawdata and putrawdata
@@ -632,6 +656,7 @@ class Application(Frame):
         findata.append(putdata[15])
 
         return findata
+
 
     def saveFile(self):
 
