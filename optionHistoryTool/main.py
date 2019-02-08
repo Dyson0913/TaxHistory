@@ -504,7 +504,7 @@ class Application(Frame):
             if self.settleday and self.pickorder.get():
                 n = self.grabDays.index(dateinfo)
                 if n != (len(self.grabDays) - 1):
-                    findata3 = self.settlePartdata(settlePartdata, weekday)
+                    findata3 = self.settlePickSamePrice(settlePartdata, weekday,data[3],putdata[3])
                     dds = ",".join(findata3)
                     dds += "\r\n"
                     finalds.append(dds)
@@ -547,6 +547,59 @@ class Application(Frame):
             callidx, putidx = self.atm_decide(plusprice, subprice)
             # poick idx of call and put
             calldataidx, putdataidx = self.atm_shift(callidx, putidx, call, put)
+            midpox = calldataidx * 2
+            putpox = putdataidx * 2 + 1
+
+        data = settledata[midpox]
+        print "call " + str(data)
+
+        putdata = settledata[putpox]
+        print "put " + str(putdata)
+
+        if weekday == "0":
+            weekday = "7"
+
+        findata = []
+        findata.append(data[0])
+        findata.append(weekday)
+        findata.append(data[3])
+        findata.append(data[5])
+        findata.append(data[6])
+        findata.append(data[7])
+        findata.append(data[8])
+        findata.append(data[14])
+        findata.append(data[15])
+
+        findata.append(putdata[3])
+        findata.append(putdata[5])
+        findata.append(putdata[6])
+        findata.append(putdata[7])
+        findata.append(putdata[8])
+        findata.append(putdata[14])
+        findata.append(putdata[15])
+
+        return findata
+
+    def settlePickSamePrice(self,settledata,weekday,callPrice,putPrice):
+        if self.interval.get() == "point":
+            # get callrawdata and putrawdata
+            call, put = self.create_atm_form(settledata)
+
+            n = len(call)
+            calldataidx =0
+            for i in range(0,n):
+                num = int(float(call[i][3]))
+                if int(float(callPrice)) == num:
+                    calldataidx =i
+                    break
+            n = len(put)
+            putdataidx = 0
+            for i in range(0,n):
+                num = int(float(put[i][3]))
+                if int(float(putPrice)) == num:
+                    putdataidx =i
+                    break
+
             midpox = calldataidx * 2
             putpox = putdataidx * 2 + 1
 
@@ -990,6 +1043,7 @@ class Application(Frame):
 root = Tk()
 root.geometry("800x600")
 app = Application(master=root)
+
 
 app.mainloop()
 
