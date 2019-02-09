@@ -993,7 +993,7 @@ class Application(Frame):
 
                 target = int(float(putraw[putpox][3])) + int(self.pointInterval.get())
                 n = len(putraw)
-                for i in range(n-1,putpox,-1):
+                for i in range(n-1,0,-1):
                     if int(float(putraw[i][3])) <= target:
                         pick = i
                         break
@@ -1001,8 +1001,8 @@ class Application(Frame):
             else:
                 target = int(float(callraw[midpox][3])) + int(self.pointInterval.get())
                 pick = 0
-                n = len(putraw)
-                for i in range(n-1,midpox, -1):
+                n = len(callraw)
+                for i in range(n-1,0, -1):
                     if int(float(callraw[i][3])) <= target:
                         pick = i
                         break

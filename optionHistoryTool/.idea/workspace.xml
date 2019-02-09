@@ -50,25 +50,25 @@
     <session id="935175143">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="44" />
+          <entry key="project.closed" value="45" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.5" value="2" />
           <entry key="project.open.time.6" value="7" />
-          <entry key="project.open.time.7" value="20" />
+          <entry key="project.open.time.7" value="21" />
           <entry key="project.open.time.8" value="12" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="44" />
+          <entry key="project.opened" value="45" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="9135" />
+          <entry key="py" value="9209" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="9135" />
+          <entry key="Python" value="9209" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -88,21 +88,19 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="212">
-              <caret line="593" selection-start-line="593" selection-end-line="593" />
+            <state relative-caret-position="188">
+              <caret line="998" column="29" selection-start-line="998" selection-start-column="29" selection-end-line="998" selection-end-column="29" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
-                <element signature="e#19162#20487#0" />
-                <element signature="e#20570#22044#0" />
-                <marker date="1549637905373" expanded="true" signature="170:175" ph="..." />
-                <marker date="1549637905373" expanded="true" signature="4157:4162" ph="..." />
-                <marker date="1549637905373" expanded="true" signature="4185:4783" ph="..." />
-                <marker date="1549637905373" expanded="true" signature="4477:4483" ph="..." />
-                <marker date="1549637905373" expanded="false" signature="4520:4529" ph="..." />
-                <marker date="1549637905373" expanded="true" signature="4520:4783" ph="..." />
-                <marker date="1549637905373" expanded="true" signature="4799:4800" ph="..." />
-                <marker date="1549637905373" expanded="true" signature="20735:21089" ph="..." />
-                <marker date="1549637905373" expanded="true" signature="21157:22647" ph="..." />
+                <marker date="1549692402397" expanded="true" signature="170:175" ph="..." />
+                <marker date="1549692402397" expanded="true" signature="4157:4162" ph="..." />
+                <marker date="1549692402397" expanded="true" signature="4185:4783" ph="..." />
+                <marker date="1549692402397" expanded="true" signature="4477:4483" ph="..." />
+                <marker date="1549692402397" expanded="false" signature="4520:4529" ph="..." />
+                <marker date="1549692402397" expanded="true" signature="4520:4783" ph="..." />
+                <marker date="1549692402397" expanded="true" signature="4799:4800" ph="..." />
+                <marker date="1549692402397" expanded="true" signature="20735:21089" ph="..." />
+                <marker date="1549692402397" expanded="true" signature="21157:22647" ph="..." />
               </folding>
             </state>
           </provider>
@@ -111,7 +109,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="412">
+            <state relative-caret-position="26675">
               <caret line="1067" selection-start-line="1067" selection-end-line="1067" />
             </state>
           </provider>
@@ -183,7 +181,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -195,6 +192,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -329,12 +327,12 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20126449" />
-      <window_info id="Structure" order="1" weight="0.25" />
+      <window_info id="Structure" order="1" weight="0.24973656" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49367756" weight="0.26681128" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.22125813" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.2548807" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.329718" />
@@ -419,31 +417,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
+    <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="412">
-          <caret line="1067" selection-start-line="1067" selection-end-line="1067" />
+        <state relative-caret-position="188">
+          <caret line="998" column="29" selection-start-line="998" selection-start-column="29" selection-end-line="998" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+            <marker date="1549692402397" expanded="true" signature="170:175" ph="..." />
+            <marker date="1549692402397" expanded="true" signature="4157:4162" ph="..." />
+            <marker date="1549692402397" expanded="true" signature="4185:4783" ph="..." />
+            <marker date="1549692402397" expanded="true" signature="4477:4483" ph="..." />
+            <marker date="1549692402397" expanded="false" signature="4520:4529" ph="..." />
+            <marker date="1549692402397" expanded="true" signature="4520:4783" ph="..." />
+            <marker date="1549692402397" expanded="true" signature="4799:4800" ph="..." />
+            <marker date="1549692402397" expanded="true" signature="20735:21089" ph="..." />
+            <marker date="1549692402397" expanded="true" signature="21157:22647" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
-          <caret line="593" selection-start-line="593" selection-end-line="593" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-            <element signature="e#19162#20487#0" />
-            <element signature="e#20570#22044#0" />
-            <marker date="1549637905373" expanded="true" signature="170:175" ph="..." />
-            <marker date="1549637905373" expanded="true" signature="4157:4162" ph="..." />
-            <marker date="1549637905373" expanded="true" signature="4185:4783" ph="..." />
-            <marker date="1549637905373" expanded="true" signature="4477:4483" ph="..." />
-            <marker date="1549637905373" expanded="false" signature="4520:4529" ph="..." />
-            <marker date="1549637905373" expanded="true" signature="4520:4783" ph="..." />
-            <marker date="1549637905373" expanded="true" signature="4799:4800" ph="..." />
-            <marker date="1549637905373" expanded="true" signature="20735:21089" ph="..." />
-            <marker date="1549637905373" expanded="true" signature="21157:22647" ph="..." />
-          </folding>
+        <state relative-caret-position="26675">
+          <caret line="1067" selection-start-line="1067" selection-end-line="1067" />
         </state>
       </provider>
     </entry>
