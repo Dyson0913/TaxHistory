@@ -521,7 +521,8 @@ class Application(Frame):
 
                 merge.append(settlePart[i])
                 merge.append(finalds[i])
-
+        else:
+            merge = finalds
 
         finalfileName = "week" + "_" + self.tm.get() + "_" + self.atmWay.get() + "_" + self.priceVol.get()
 

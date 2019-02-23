@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/main.py" line="1021" />
+    <bookmark url="file://$PROJECT_DIR$/main.py" line="1022" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fec4cfef-b197-4100-b972-b9abfb00c7f9" name="Default" comment="" />
@@ -11,106 +11,26 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FUSProjectUsageTrigger">
-    <session id="-731750630">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.closed" value="9" />
-          <entry key="project.open.time.4" value="1" />
-          <entry key="project.open.time.5" value="1" />
-          <entry key="project.open.time.6" value="4" />
-          <entry key="project.open.time.7" value="3" />
-          <entry key="project.opened" value="9" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="Bash" value="14" />
-          <entry key="Python Console" value="2" />
-          <entry key="py" value="6440" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="Bash" value="14" />
-          <entry key="Python" value="6442" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.open">
-        <counts>
-          <entry key="py" value="7" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="Python" value="7" />
-        </counts>
-      </usages-collector>
-    </session>
-    <session id="935175143">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.closed" value="45" />
-          <entry key="project.open.time.12" value="1" />
-          <entry key="project.open.time.4" value="1" />
-          <entry key="project.open.time.5" value="2" />
-          <entry key="project.open.time.6" value="7" />
-          <entry key="project.open.time.7" value="21" />
-          <entry key="project.open.time.8" value="12" />
-          <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="45" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="py" value="9209" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="Python" value="9209" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.open">
-        <counts>
-          <entry key="py" value="28" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="Python" value="28" />
-        </counts>
-      </usages-collector>
-    </session>
-  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="188">
-              <caret line="998" column="29" selection-start-line="998" selection-start-column="29" selection-end-line="998" selection-end-column="29" />
+            <state relative-caret-position="213">
+              <caret line="524" column="27" selection-start-line="524" selection-start-column="20" selection-end-line="524" selection-end-column="27" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
-                <marker date="1549692402397" expanded="true" signature="170:175" ph="..." />
-                <marker date="1549692402397" expanded="true" signature="4157:4162" ph="..." />
-                <marker date="1549692402397" expanded="true" signature="4185:4783" ph="..." />
-                <marker date="1549692402397" expanded="true" signature="4477:4483" ph="..." />
-                <marker date="1549692402397" expanded="false" signature="4520:4529" ph="..." />
-                <marker date="1549692402397" expanded="true" signature="4520:4783" ph="..." />
-                <marker date="1549692402397" expanded="true" signature="4799:4800" ph="..." />
-                <marker date="1549692402397" expanded="true" signature="20735:21089" ph="..." />
-                <marker date="1549692402397" expanded="true" signature="21157:22647" ph="..." />
+                <element signature="e#27777#28693#0" />
+                <marker date="1550892976740" expanded="true" signature="170:175" ph="..." />
+                <marker date="1550892976740" expanded="true" signature="4157:4162" ph="..." />
+                <marker date="1550892976740" expanded="true" signature="4185:4783" ph="..." />
+                <marker date="1550892976740" expanded="true" signature="4477:4483" ph="..." />
+                <marker date="1550892976740" expanded="false" signature="4520:4529" ph="..." />
+                <marker date="1550892976740" expanded="true" signature="4520:4783" ph="..." />
+                <marker date="1550892976740" expanded="true" signature="4799:4800" ph="..." />
+                <marker date="1550892976740" expanded="true" signature="20776:21130" ph="..." />
+                <marker date="1550892976740" expanded="true" signature="21198:22688" ph="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="26675">
-              <caret line="1067" selection-start-line="1067" selection-end-line="1067" />
             </state>
           </provider>
         </entry>
@@ -126,7 +46,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>addminCnt</find>
       <find>errorMsg</find>
       <find>#filterdate = self.settledays()</find>
       <find>self.priceVol</find>
@@ -156,6 +75,7 @@
       <find>shift</find>
       <find>pop</find>
       <find>self.settleday</find>
+      <find>bs4</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -169,7 +89,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-11" />
     <option name="y" value="16" />
     <option name="width" value="1934" />
@@ -181,17 +101,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="optionHistoryTool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
+      <pane id="ProjectPane" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -324,7 +234,8 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20126449" />
       <window_info id="Structure" order="1" weight="0.24973656" />
@@ -332,12 +243,12 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49367756" weight="0.26681128" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.2548807" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.25460455" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.329718" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.4947313" visible="true" weight="0.2570499" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.4947313" visible="true" weight="0.25568798" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50632244" side_tool="true" weight="0.23427331" />
       <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.49736565" weight="0.3286334" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -346,31 +257,30 @@
       <window_info anchor="right" id="Data View" order="3" />
     </layout>
   </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
-  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>849</line>
+          <line>850</line>
           <option name="timeStamp" value="61" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>903</line>
+          <line>904</line>
           <option name="timeStamp" value="62" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>874</line>
+          <line>875</line>
           <option name="timeStamp" value="63" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/main.py</url>
+          <line>507</line>
+          <option name="timeStamp" value="64" />
+        </line-breakpoint>
       </breakpoints>
-      <breakpoints-dialog>
-        <breakpoints-dialog />
-      </breakpoints-dialog>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -410,36 +320,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-762174762/__builtin__.py">
+    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-762174762/__builtin__.py" />
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="3350" column="8" selection-start-line="3350" selection-start-column="8" selection-end-line="3350" selection-end-column="8" />
+        <state relative-caret-position="825">
+          <caret line="1067" selection-start-line="1067" selection-end-line="1067" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="998" column="29" selection-start-line="998" selection-start-column="29" selection-end-line="998" selection-end-column="29" />
+        <state relative-caret-position="213">
+          <caret line="524" column="27" selection-start-line="524" selection-start-column="20" selection-end-line="524" selection-end-column="27" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-            <marker date="1549692402397" expanded="true" signature="170:175" ph="..." />
-            <marker date="1549692402397" expanded="true" signature="4157:4162" ph="..." />
-            <marker date="1549692402397" expanded="true" signature="4185:4783" ph="..." />
-            <marker date="1549692402397" expanded="true" signature="4477:4483" ph="..." />
-            <marker date="1549692402397" expanded="false" signature="4520:4529" ph="..." />
-            <marker date="1549692402397" expanded="true" signature="4520:4783" ph="..." />
-            <marker date="1549692402397" expanded="true" signature="4799:4800" ph="..." />
-            <marker date="1549692402397" expanded="true" signature="20735:21089" ph="..." />
-            <marker date="1549692402397" expanded="true" signature="21157:22647" ph="..." />
+            <element signature="e#27777#28693#0" />
+            <marker date="1550892976740" expanded="true" signature="170:175" ph="..." />
+            <marker date="1550892976740" expanded="true" signature="4157:4162" ph="..." />
+            <marker date="1550892976740" expanded="true" signature="4185:4783" ph="..." />
+            <marker date="1550892976740" expanded="true" signature="4477:4483" ph="..." />
+            <marker date="1550892976740" expanded="false" signature="4520:4529" ph="..." />
+            <marker date="1550892976740" expanded="true" signature="4520:4783" ph="..." />
+            <marker date="1550892976740" expanded="true" signature="4799:4800" ph="..." />
+            <marker date="1550892976740" expanded="true" signature="20776:21130" ph="..." />
+            <marker date="1550892976740" expanded="true" signature="21198:22688" ph="..." />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="26675">
-          <caret line="1067" selection-start-line="1067" selection-end-line="1067" />
         </state>
       </provider>
     </entry>
