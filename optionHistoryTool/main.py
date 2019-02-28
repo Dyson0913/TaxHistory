@@ -1,13 +1,18 @@
 import os
 from Tkinter import *
 import datetime
+import time
 import re
 import requests
 from datetime import date
+from collections import OrderedDict
+import collections
 import csv
 from bs4 import BeautifulSoup
+from StringIO import StringIO
 
-
+from DB.db_proxy import *
+db = db_proxy()
 
 class Application(Frame):
 
@@ -155,8 +160,6 @@ class Application(Frame):
         return True
 
     def parse(self):
-
-
         year, month, mydate = self.datepare(self.databegin.get())
         eyear, emonth, emydate = self.datepare(self.dataend.get())
 
@@ -175,32 +178,30 @@ class Application(Frame):
 
         # count for now day
         oneday = datetime.timedelta(days=1)
-        self.genDays = list()
-        self.grabDays = list()
-        for num in range(0, totalday):
-            delta = datetime.timedelta(days=num)
-            newday = backday - delta
-            self.anyday = datetime.datetime(newday.year, newday.month, newday.day).strftime("%w")
-            #print "%s  week %d %d" % (str(newday), int(self.anyday),(int(self.anyday) % 6 != 0 ))
+        self.grabDays = OrderedDict()
+        # if check settle
+        if self.settleday.get() == 0:
+            for num in range(0, totalday):
+                delta = datetime.timedelta(days=num)
+                newday = backday - delta
 
-            #folder not exists, mk it
-            if os.path.isdir(".\\data\\"+str(newday)) == False:
-                self.genDays.append(newday)
-                #print os.path.exists(".\\"+str(newday)+"\\"+str(newday)+".txt")
-            self.grabDays.append(newday)
+                self.anyday = datetime.datetime(newday.year, newday.month, newday.day).strftime("%w")
+                day = dict()
+                self.grabDays[str(newday.year) + "\\" + '{:02d}'.format(newday.month) + "\\" + '{:02d}'.format( newday.day)] = 0
+                self.grabDays = collections.OrderedDict(reversed(list(self.grabDays.items())))
+        else:
+            if self.settlefilter():
+                self.errorMsg("settle day error occurred!! check data/settle.txt for more infomation")
+                return
 
-        #if check settle , just parse filter day
-        if self.settlefilter():
-            self.errorMsg("settle day error occurred!! check data/settle.txt for more infomation")
-            return
-
+        #print len(self.grabDays)
         #save file
         self.stateS.set("start = grab data....")
         self.saveFile()
         self.stateS.set("start = grab data ok")
 
         #load csv
-        self.loadcsv()
+        #self.loadcsv()
 
     def loadcsv(self):
 
@@ -660,9 +661,24 @@ class Application(Frame):
 
     def saveFile(self):
 
-        for dateinfo in self.genDays:
-            rdateStart = str(dateinfo.year) + '/' + '{:02d}'.format(dateinfo.month) + "/" + '{:02d}'.format(dateinfo.day)
-            rdateEnd = str(dateinfo.year) + '/' + '{:02d}'.format(dateinfo.month) + "/" + '{:02d}'.format(dateinfo.day)
+        #check db has data first
+        grabday = db.get("option/data")
+        dbgrabday = grabday.order_by_key().get()
+        #no data in db
+        if dbgrabday != None:
+            firstday ,endday = self.getdateRange()
+            firstlimit = self.day1SmallDay2Compare(list(dbgrabday)[0], firstday)
+            lastlimit = self.day1SmallDay2Compare(endday, list(dbgrabday)[-1])
+            if firstlimit and lastlimit:
+                dbgrabday = dbgrabday.order_by_key().start_at(firstday).end_at(endday).get()
+                return
+
+
+        for date,zero in self.grabDays.items():
+            #rdateStart = str(dateinfo.year) + '/' + '{:02d}'.format(dateinfo.month) + "/" + '{:02d}'.format(dateinfo.day)
+            #dateEnd = str(dateinfo.year) + '/' + '{:02d}'.format(dateinfo.month) + "/" + '{:02d}'.format(dateinfo.day)
+            rdateStart = date.replace("\\", "/")
+            rdateEnd = date.replace("\\", "/")
             #my_data = {'DATA_DATE': rdateStart, 'DATA_DATE1': rdateEnd, 'datestart': rdateStart, 'dateend': rdateEnd,'COMMODITY_ID': 'TXO', 'his_year': '2017'}
             my_data = {'queryStartDate': rdateStart, 'queryEndDate': rdateEnd, 'down_type': 1, 'commodity_id': 'TXO'}
             #print my_data
@@ -674,11 +690,80 @@ class Application(Frame):
             if self.nodata(re.sub('\r\n', '', r.content)):
                 continue
 
-            os.makedirs(".\\data\\"+str(dateinfo))
-            #save file
-            fp = open(".\\data\\"+str(dateinfo)+"\\"+str(dateinfo)+".txt", "wb")
-            fp.write(r.content)
-            fp.close()
+            #print r.content
+            #f = StringIO(r.content)
+            reader = csv.reader(r.content.split('\n'), delimiter=',')
+            i = 0
+            lastprice =0
+            nextprice = 0
+            set1 = []
+            set2 = []
+            putin = 0
+            putCnt = 0
+            for row in reader:
+                if i == 0:
+                    i = 1
+                    continue
+                if i == 1:
+                    i = 2
+                    lastprice = int(float(row[3]))
+                nextprice =  int(float(row[3]))
+
+                #replse new price
+                if nextprice > lastprice:
+                    lastprice = nextprice
+                elif nextprice < lastprice:
+                    lastprice = nextprice
+                    if putCnt == 0:
+                        putin = 1
+                        # read second section
+                        putCnt = 1
+                    else:
+                        break;
+
+                if putin ==0:
+                    if row[17] == '\xa4@\xaf\xeb':
+                        del row[17]
+                        del row[4]
+                        set1.append(row)
+                else:
+                    if row[17] == '\xa4@\xaf\xeb':
+                        del row[17]
+                        del row[4]
+                        set2.append(row)
+
+            #sepreate to 2 part
+            rdateStart = rdateStart.replace("/", "\\")
+
+            call = []
+            put = []
+            for i,item in enumerate(set1):
+                if i % 2 ==0:
+                    call.append(item)
+                else:
+                    put.append(item)
+            part = dict()
+            part['call'] = call
+            part['put'] = put
+
+            call_1 =[]
+            put_1 = []
+            for i,item in enumerate(set2):
+                if i % 2 ==0:
+                    call_1.append(item)
+                else:
+                    put_1.append(item)
+            part2 = dict()
+            part2['call'] = call_1
+            part2['put'] = put_1
+
+            dd = dict()
+            dd['part1'] = part
+            dd['part2'] = part2
+
+            db.save("option/data/" + rdateStart, dd)
+
+
 
     def nodata(self, str):
         if len(str) == 175:
@@ -804,10 +889,32 @@ class Application(Frame):
         #find last ,used default
         return mid
 
+    def day1SmallDay2Compare(self,day1,day2):
+        date1 = "2015/12/31"
+        date2 = "2015/12/31"
+        newdate1 = time.strptime(day1, "%Y\%m\%d")
+        newdate2 = time.strptime(day2, "%Y\%m\%d")
+
+        return newdate1 <= newdate2
+
     def settledays(self):
         year, month, mydate = self.datepare(self.databegin.get())
         eyear, emonth, emydate = self.datepare(self.dataend.get())
         my_data = {'_all': "on",'start_year': year, 'start_month': '{:02d}'.format(month), 'end_year': eyear, 'end_month': '{:02d}'.format(emonth),'COMMODITY_ID': 2}
+        firstday = str(year)+"\\"+'{:02d}'.format(month)+ "\\" +'{:02d}'.format(mydate)
+        endday =  str(eyear) + "\\" + '{:02d}'.format(emonth)  +"\\"+'{:02d}'.format(emydate)
+
+        #check db first
+        settleday = db.get("option/settledays")
+        settle = settleday.order_by_key().get()
+        firstlimit = self.day1SmallDay2Compare(list(settle)[0],firstday)
+        lastlimit = self.day1SmallDay2Compare(endday,list(settle)[-1])
+
+        #in db range just return db info, not ,biger or last , grab again
+        if firstlimit and lastlimit:
+            settle = settleday.order_by_key().start_at(firstday).end_at(endday).get()
+            return settle
+
 
         #r = requests.post('http://www.taifex.com.tw/cht/5/FutIndxFSP.asp', data=my_data)
         r = requests.post('https://www.taifex.com.tw/cht/5/optIndxFSP', data=my_data)
@@ -834,26 +941,38 @@ class Application(Frame):
                 #print cells[0].find(text=True)
                 filterdata.append(cells[0].find(text=True))
 
-        ds = ",".join(filterdata)
-        ds += "\r\n"
+        if settleday == None:
+             for item in filterdata:
+                 db.save("option/settledays/"+item.replace("/", "\\"), json.dumps(0))
+        else:
+            # update
+            for item in filterdata:
+                day = db.get("option/settledays/"+item.replace("/", "\\"))
+                if day.get() == None:
+                    db.save("option/settledays/" + item.replace("/", "\\"), json.dumps(0))
 
-        # save file
-        fp = open(".\\data\\settle.txt", "wb")
-        fp.write(ds)
-        fp.close()
-        return filterdata
+        settle = settleday.order_by_key().start_at(firstday).end_at(endday).get()
+        return settle
+
+    def getdateRange(self):
+        year, month, mydate = self.datepare(self.databegin.get())
+        eyear, emonth, emydate = self.datepare(self.dataend.get())
+        firstday = str(year) + "\\" + '{:02d}'.format(month) + "\\" + '{:02d}'.format(mydate)
+        endday = str(eyear) + "\\" + '{:02d}'.format(emonth) + "\\" + '{:02d}'.format(emydate)
+        return firstday ,endday
 
     def settlefilter(self):
-        if self.settleday.get() == 0:
-            return 0
-
         filterdate = self.settledays()
         #filterdate = self.grabNewsettledays()
 
-
-        #if filterdate == None, want settle day and settle day can't grab, not handle
-        if filterdate is None:
+        # if filterdate == None, want settle day and settle day can't grab, not handle
+        if len(filterdate) == 0:
             return 1
+
+        self.grabDays = filterdate
+        return 0
+
+
 
         newfilter = []
         for dateinfo in self.grabDays:
