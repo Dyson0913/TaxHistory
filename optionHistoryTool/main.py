@@ -200,8 +200,8 @@ class Application(Frame):
         self.saveFile()
         self.stateS.set("start = grab data ok")
 
-        #load csv
-        #self.loadcsv()
+        #load db data
+        self.loadcsv()
 
     def loadcsv(self):
 
@@ -209,301 +209,97 @@ class Application(Frame):
         finalfileName = ""
         finalds = []
         settleRawData = []
-        for dateinfo in self.grabDays:
-            #day filter
-            weekday = datetime.datetime(dateinfo.year, dateinfo.month, dateinfo.day).strftime("%w")
 
-            today = str(dateinfo.year) + '/' + '{:02d}'.format(dateinfo.month) + "/" + '{:02d}'.format(dateinfo.day)
-            # folder not exits, continue
-            chckday = str(dateinfo.year) + '-' + '{:02d}'.format(dateinfo.month) + "-" + '{:02d}'.format(dateinfo.day)
-            if os.path.isdir(".\\data\\" + str(chckday)) == False:
-                continue
+        grabday = db.get("option/data")
+        dbgrabday = grabday.order_by_key().get()
+        firstday, endday = self.getdateRange()
+        dbgrabday = grabday.order_by_key().start_at(firstday).end_at(endday).get()
 
-            stopdayname = str(dateinfo.year)
-            wlist = []
-            secdata = []
-            path = ".\\data\\"+str(dateinfo)+"\\"+str(dateinfo)+".txt"
-            f = open(path, 'rb')
-            #W1"" ,will just pick W1, ""W1, will pick ""W4
-            for row in csv.reader(f):
-                wjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
-                prematchObj = wjudge.match(row[2])
+        n = len(dbgrabday)
 
-                #has w1 w2
-                if prematchObj != None and prematchObj.group(2) != None:
-                    pattern = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
-                    matchObj = pattern.match(row[2])
-                    if matchObj != None:
-                        #"normal data", not after pan data
-                        if row[17] != '\xbdL\xab\xe1':
-                            secdata.append(row)
-                        #print matchObj.group(2)
-                        #print row[2]
-                        if matchObj.group(3) not in wlist:
-                            wlist.append(matchObj.group(3))
-                elif prematchObj != None and prematchObj.group(2) == None:
-                    #w3 only get like 201808 ,
-                    if len(wlist) != 0:
-                        if self.settleday.get() == 1:
-                           pass
-                        else:
-                            continue
-                    daymatch = str(dateinfo.year) + '{:02d}'.format(dateinfo.month)
-                    if row[2].strip() == daymatch:
-                        if row[17] != '\xbdL\xab\xe1':
-                            secdata.append(row)
+        if n == 0:
+            self.errorMsg("no match data ,output empty file")
+            return
 
-
-            f.close()
-
-            semifinaldata =[]
-            #for settle openPrice,get last week settle like, 2013/1/2's settle will be front of 2013/1/9
-            settlePartdata = []
-            #del old w
-            if len(wlist) > 0:
-                #w4 prejudge
-                if len(wlist) == 1:
-                    #2019/1/16  201901 first then201901W4
-                    semifinaldata = self.filterw4(secdata)
-
-                    # settle data ,filter form secdata
-                    if self.settleday.get() and self.pickorder.get():
-                        settlePartdata = self.filterExcusivePart(secdata,semifinaldata);
-
-
-                else:
-                    for row in secdata:
-                        #wlist w4,w1,get w4, modify to get last
-                        num = wlist[self.pickorder.get()]
-                        depe = re.compile("(" + "\\d\\d\\d\\d\\d\\d)(W" + num + ")")
-                        Obj = depe.match(row[2])
-                        if Obj != None:
-                            semifinaldata.append(row)
-                        else:
-                            rest_num = 0
-                            if self.pickorder.get() == 1:
-                                rest_num = 0
-                            else:
-                                rest_num = 1
-                            rest_num = wlist[rest_num]
-                            depe2 = re.compile("(" + "\\d\\d\\d\\d\\d\\d)(W" + rest_num + ")")
-                            Obj2 = depe2.match(row[2])
-                            if Obj2 != None:
-                                settlePartdata.append(row)
-            else:
-                #w3 only keep "normal data", not after pan data
-                for row in secdata:
-                    if row[17] == '\xa4@\xaf\xeb':
-                        semifinaldata.append(row)
-
-            #print semifinaldata
-            #check lowest price
-            n = len(semifinaldata)
-
-            if n == 0:
-                self.errorMsg("no match data ,output empty file")
-                continue
-
-            plusmidprice = []
-            submidprice = []
-            callminNum = 99998
-            addminCnt = 1
-            putminNum = 99998
-            subminCnt = 1
-
-            #check un-normal decline (like 2016/5/5 wired , 288-> 104-> 196)
-            callplist =[]
-            putplist =[]
-            callsortvalue = 99999
-            doublePriceValue = -1;
-            doublePriceValueSub = -1;
-            for i in range(0,n,2):
-                calldata = semifinaldata[i]
-                putdata = semifinaldata[i+1]
-                callprice = 0
-                putprice = 0
-                if calldata[self.OpenOrClose()] == '-':
-                    callprice = 99999
-                else:
-                    callprice = float(calldata[self.OpenOrClose()])
-                callplist.append(callprice)
-
-                if putdata[self.OpenOrClose()] == '-':
-                    putprice = 99999
-                else:
-                    putprice = float(putdata[self.OpenOrClose()])
-                putplist.append(putprice)
-                    #callsortvalue = callprice - 0.1
-
-                add = callprice + putprice
-                plusmidprice.append(add)
-                if add == callminNum:
-                    addminCnt += 1
-                    doublePriceValue = i/2
-                if add < callminNum:
-                    callminNum = add
-
-                #when using sub condition, call - and put - will be zero, cause judge error, so fix it
-                if callprice == 99999 and putprice == 99999:
-                    sub = 99999
-                else:
-                    sub = abs(callprice - putprice)
-
-                submidprice.append(sub)
-                if sub == putminNum:
-                    subminCnt += 1
-                    doublePriceValueSub = i/2
-                if sub < putminNum:
-                    putminNum = sub
-
-            print plusmidprice
-            print submidprice
-            print plusmidprice.index(min(plusmidprice))
-            print submidprice.index(min(submidprice))
-
-            #pick priveVol dataformat
-            #0 1
-            #2 3
-            #4 5
-            midpox = 0
-            putpox = 0
-            outSec = False
-            if self.atmWay.get() == 'plusAtm':
-                midpox = self.adjustWiredmidprice(plusmidprice,callplist,putplist,0) #plusmidprice.index(min(plusmidprice))
-                putpox = midpox
-
-                # two same price ,ITM put shift 2
-                if addminCnt == 2 and int(self.priceVol.get()) == 0:
-                    # two price the same,judge is the min
-                    if doublePriceValue - plusmidprice.index(min(plusmidprice)) == 1:
-                        outSec = True
-            else:
-                midpox = self.adjustWiredmidprice(submidprice,callplist,putplist,1) #submidprice.index(min(submidprice))
-                putpox = midpox
-
-                # two same price ,OTM put shift 2
-                if subminCnt == 2 and int(self.priceVol.get()) == 0:
-                    # two price the same,judge is the min
-                    if doublePriceValueSub - submidprice.index(min(submidprice)) == 1:
-                        outSec = True
-
-            midpox *= 2
-            putpox = (putpox *2) +1
-
-            # shift to get
-            # call in -2 ,-4.... out +2,+4
-            if self.tm.get() == "ITM":
-                midpox -= int(self.priceVol.get()) * 2
-                putpox += int(self.priceVol.get()) * 2
-
-                if self.atmWay.get() == 'plusAtm':
-                    if addminCnt == 2 and int(self.priceVol.get()) != 0:
-                        putpox += 2
-                else:
-                    if subminCnt == 2 and int(self.priceVol.get()) != 0:
-                        putpox += 2
-            else:
-                midpox += int(self.priceVol.get()) * 2
-                putpox -= int(self.priceVol.get()) * 2
-
-                if self.atmWay.get() == 'plusAtm':
-                    if addminCnt == 2 and int(self.priceVol.get()) != 0:
-                        midpox += 2
-                else:
-                    if subminCnt == 2 and int(self.priceVol.get()) != 0:
-                        midpox += 2
-
-            #out put data
-            getpo = len(semifinaldata)
-            if midpox > getpo or midpox < 0:
-                continue
-
-            #not mention begin, so ~~ ha ha
-            if self.interval.get() == "point":
-                # get callrawdata and putrawdata
-                call, put = self.create_atm_form(semifinaldata)
-                # add and sub call and put
-                plusprice, subprice = self.calculate_atm(call, put)
-                # decide callAtm and putAtm
-                callidx, putidx = self.atm_decide(plusprice, subprice)
-                # poick idx of call and put
-                calldataidx, putdataidx = self.atm_shift(callidx, putidx, call, put)
-                midpox = calldataidx*2
-                putpox = putdataidx*2 +1
-
-            data = semifinaldata[midpox]
-            data2 = None
-            # if has sec data
-            if outSec:
-                data2 = semifinaldata[midpox+2]
-
-            print "call " + str(data)
-
-            if putpox > getpo or putpox < 0:
-                continue
-            putdata = semifinaldata[putpox]
-            putSecdata = None;
-            if outSec :
-                putSecdata = semifinaldata[putpox+2]
-            print "put " + str(putdata)
-
-
-            findata =[]
-            if weekday == "0":
-                weekday = "7"
-
-            findata.append(data[0])
-            findata.append(weekday)
-            findata.append(data[3])
-            findata.append(data[5])
-            findata.append(data[6])
-            findata.append(data[7])
-            findata.append(data[8])
-            findata.append(data[14])
-            findata.append(data[15])
-
-            findata.append(putdata[3])
-            findata.append(putdata[5])
-            findata.append(putdata[6])
-            findata.append(putdata[7])
-            findata.append(putdata[8])
-            findata.append(putdata[14])
-            findata.append(putdata[15])
-
-            print findata
-
-            findata2 = []
-            if outSec:
-                findata2.append(data2[0])
-                findata2.append(weekday)
-                findata2.append(data2[3])
-                findata2.append(data2[5])
-                findata2.append(data2[6])
-                findata2.append(data2[7])
-                findata2.append(data2[8])
-                findata2.append(data2[14])
-                findata2.append(data2[15])
-
-                findata2.append(putSecdata[3])
-                findata2.append(putSecdata[5])
-                findata2.append(putSecdata[6])
-                findata2.append(putSecdata[7])
-                findata2.append(putSecdata[8])
-                findata2.append(putSecdata[14])
-                findata2.append(putSecdata[15])
-
-            if outSec and self.settleday.get() == 0:
-                dds = ",".join(findata2)
-                dds += "\r\n"
-                finalds.append(dds)
-
-            ds = ",".join(findata)
-            ds +="\r\n"
-            finalds.append(ds)
-
-            # settle data save ,pick and merge later
+        semifinaldata = []
+        call = []
+        put = []
+        weekday =''
+        for data,value in dbgrabday.items():
+            arr = data.split('\\')
+            weekday = datetime.datetime(int(arr[0]),int(arr[1]),int(arr[2])).strftime("%w")
             if self.settleday.get() and self.pickorder.get():
-                settleRawData.append([settlePartdata,weekday,data[3],putdata[3]])
+                call = value["part2"]['call']
+                put = value["part2"]['put']
+            else:
+                call = value["part1"]['call']
+                put = value["part1"]['put']
+
+        #check un-normal decline (like 2016/5/5 wired , 288-> 104-> 196)
+        midpox = 0
+        putpox = 0
+        #not mention begin, so ~~ ha ha
+        if self.interval.get() == "point":
+            # get callrawdata and putrawdata
+            call, put = self.create_atm_form(semifinaldata)
+            # add and sub call and put
+            plusprice, subprice = self.calculate_atm(call, put)
+            # decide callAtm and putAtm
+            callidx, putidx = self.atm_decide(plusprice, subprice)
+            # poick idx of call and put
+            calldataidx, putdataidx = self.atm_shift(callidx, putidx, call, put)
+            midpox = calldataidx#*2
+            putpox = putdataidx#*2 +1
+        else:
+            #seprate ,refector using new way
+            plusprice, subprice = self.calculate_atm(call, put)
+            print  plusprice
+            print  subprice
+            callidx, putidx = self.atm_decide(plusprice, subprice)
+            print  callidx
+            print  putidx
+            calldataidx, putdataidx = self.atm_shift(callidx, putidx, call, put)
+            print  calldataidx
+            print  putdataidx
+            midpox = calldataidx# * 2
+            putpox = putdataidx# * 2 + 1
+
+        data = call[midpox]
+        print "call " + str(data)
+        putdata = put[putpox]
+        print "put " + str(putdata)
+
+        findata =[]
+        if weekday == "0":
+            weekday = "7"
+
+        findata.append(data[0])
+        findata.append(weekday)
+        findata.append(data[3])
+        findata.append(data[4])
+        findata.append(data[5])
+        findata.append(data[6])
+        findata.append(data[7])
+        findata.append(data[13])
+        findata.append(data[14])
+
+        findata.append(putdata[3])
+        findata.append(putdata[4])
+        findata.append(putdata[5])
+        findata.append(putdata[6])
+        findata.append(putdata[7])
+        findata.append(putdata[13])
+        findata.append(putdata[14])
+
+        print findata
+
+        ds = ",".join(findata)
+        ds +="\r\n"
+        finalds.append(ds)
+
+        # settle data save ,pick and merge later
+        if self.settleday.get() and self.pickorder.get():
+            settleRawData.append([settlePartdata,weekday,data[3],putdata[3]])
 
 
         if len(finalds) == 0:
@@ -537,7 +333,6 @@ class Application(Frame):
         fp.close()
 
         if self.rawDataout.get():
-            call, put = self.create_atm_form(semifinaldata)
             self.OutputrawData(call,put)
 
 
@@ -670,7 +465,7 @@ class Application(Frame):
             firstlimit = self.day1SmallDay2Compare(list(dbgrabday)[0], firstday)
             lastlimit = self.day1SmallDay2Compare(endday, list(dbgrabday)[-1])
             if firstlimit and lastlimit:
-                dbgrabday = dbgrabday.order_by_key().start_at(firstday).end_at(endday).get()
+                dbgrabday = grabday.order_by_key().start_at(firstday).end_at(endday).get()
                 return
 
 
@@ -776,86 +571,6 @@ class Application(Frame):
             return True
         return False
 
-    def filterw4(self,data):
-
-        hasw4 = False
-        w4Cnt = 0;
-
-        #judget W2"" ,or ""W4
-        isWordfirst = False
-        orderjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
-        prematchObj = orderjudge.match(data[0][2])
-        if prematchObj.group(2) != None:
-            isWordfirst = True;
-
-        for row in data:
-            wjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
-            prematchObj = wjudge.match(row[2])
-            #check is have w4
-            if prematchObj != None and prematchObj.group(2) != None:
-                if prematchObj.group(3) == "4" or prematchObj.group(3) == "2" or prematchObj.group(3) == "1":
-                    hasw4 = True
-                    w4Cnt +=1
-
-        #none settle W4' ' ,just return ,no need filter
-        if hasw4 and (w4Cnt == len(data)):
-            return data
-
-        newW3 = [];
-
-        if hasw4:
-            if  self.settleday.get():
-                # decide pick first or last(W2"" ,or ""W4)
-                # want pick last
-                if self.pickorder.get():
-                    if isWordfirst:
-                        for row in data:
-                            wjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
-                            prematchObj = wjudge.match(row[2])
-                            #keep like 201801
-                            if prematchObj != None and prematchObj.group(2) == None:
-                                if row[17] == '\xa4@\xaf\xeb':
-                                    newW3.append(row)
-                        return newW3
-                    else:
-                        for row in data:
-                            wjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
-                            prematchObj = wjudge.match(row[2])
-                            # keep like 201801W2
-                            if prematchObj != None and prematchObj.group(2) != None:
-                                if row[17] == '\xa4@\xaf\xeb':
-                                    newW3.append(row)
-                        return newW3
-                else:
-                    if isWordfirst:
-                        for row in data:
-                            wjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
-                            prematchObj = wjudge.match(row[2])
-                            # keep like 201801W2
-                            if prematchObj != None and prematchObj.group(2) != None:
-                                if row[17] == '\xa4@\xaf\xeb':
-                                    newW3.append(row)
-                        return newW3
-                    else:
-                        for row in data:
-                            wjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
-                            prematchObj = wjudge.match(row[2])
-                            #keep like 201801
-                            if prematchObj != None and prematchObj.group(2) == None:
-                                if row[17] == '\xa4@\xaf\xeb':
-                                    newW3.append(row)
-                        return newW3
-            else:
-                #filter W4 ,keep data like 201801
-                for row in data:
-                    wjudge = re.compile("(\\d\\d\\d\\d\\d\\d)(W(\\d))*")
-                    prematchObj = wjudge.match(row[2])
-                    # check is have w4
-                    if prematchObj != None and prematchObj.group(2) == None:
-                        if row[17] == '\xa4@\xaf\xeb':
-                            newW3.append(row)
-                return newW3
-        return data
 
     def adjustWiredmidprice(self,midprice,pluslist,sublist,type):
         mid = midprice.index(min(midprice))
@@ -970,22 +685,6 @@ class Application(Frame):
             return 1
 
         self.grabDays = filterdate
-        return 0
-
-
-
-        newfilter = []
-        for dateinfo in self.grabDays:
-            # day filter
-            today = str(dateinfo.year) + '/' + '{:02d}'.format(dateinfo.month) + "/" + '{:02d}'.format(dateinfo.day)
-            if today in  filterdate:
-                newfilter.append(dateinfo)
-
-        print newfilter
-        if len(newfilter) != 0:
-            self.grabDays = newfilter
-        else:
-            return 1
         return 0
 
     def grabNewsettledays(self):
