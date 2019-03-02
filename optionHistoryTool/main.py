@@ -172,23 +172,35 @@ class Application(Frame):
         nowday = date(year, month, mydate)
         backday = date(eyear, emonth, emydate)
 
-        # 0 = sunday
-        self.anyday = datetime.datetime(year, month, mydate).strftime("%w")
         totalday = -(nowday-backday).days+1
 
         # count for now day
         oneday = datetime.timedelta(days=1)
-        self.grabDays = OrderedDict()
+        self.grabDays = []#OrderedDict()
+        alldaymaker = []
+        firstday = ''
+        lastday = ''
         # if check settle
         if self.settleday.get() == 0:
             for num in range(0, totalday):
                 delta = datetime.timedelta(days=num)
                 newday = backday - delta
+                datemaker = str(newday.year) + "\\" + '{:02d}'.format(newday.month) + "\\" + '{:02d}'.format(newday.day)
+                alldaymaker.append(datemaker)
+                if num == 0:
+                    lastday = datemaker
+                if num == totalday-1:
+                    firstday = datemaker
+                self.grabDays.append(datemaker)
+            #self.grabDays = collections.OrderedDict(reversed(list(self.grabDays.items())))
+            alldaymaker.reverse()
+            #check db querydatelist
+            grabday = db.get("option/querydate")
+            dbgrabday = grabday.get()
+            if dbgrabday == None:
+                #create datelist
+                db.save("option/querydate/datelist", [firstday,lastday])
 
-                self.anyday = datetime.datetime(newday.year, newday.month, newday.day).strftime("%w")
-                day = dict()
-                self.grabDays[str(newday.year) + "\\" + '{:02d}'.format(newday.month) + "\\" + '{:02d}'.format( newday.day)] = 0
-                self.grabDays = collections.OrderedDict(reversed(list(self.grabDays.items())))
         else:
             if self.settlefilter():
                 self.errorMsg("settle day error occurred!! check data/settle.txt for more infomation")
@@ -197,7 +209,7 @@ class Application(Frame):
         #print len(self.grabDays)
         #save file
         self.stateS.set("start = grab data....")
-        self.saveFile()
+        self.saveFile(firstday,lastday)
         self.stateS.set("start = grab data ok")
 
         #load db data
@@ -229,77 +241,79 @@ class Application(Frame):
             arr = data.split('\\')
             weekday = datetime.datetime(int(arr[0]),int(arr[1]),int(arr[2])).strftime("%w")
             if self.settleday.get() and self.pickorder.get():
-                call = value["part2"]['call']
-                put = value["part2"]['put']
+                call = value["part2"]['call'].split('#')
+                put = value["part2"]['put'].split('#')
             else:
-                call = value["part1"]['call']
-                put = value["part1"]['put']
+                call = [str(i) for i in value["part1"]['call'].split('#')]
+                put = [str(i) for i in value["part1"]['put'].split('#')]
 
-        #check un-normal decline (like 2016/5/5 wired , 288-> 104-> 196)
-        midpox = 0
-        putpox = 0
-        #not mention begin, so ~~ ha ha
-        if self.interval.get() == "point":
-            # get callrawdata and putrawdata
-            call, put = self.create_atm_form(semifinaldata)
-            # add and sub call and put
-            plusprice, subprice = self.calculate_atm(call, put)
-            # decide callAtm and putAtm
-            callidx, putidx = self.atm_decide(plusprice, subprice)
-            # poick idx of call and put
-            calldataidx, putdataidx = self.atm_shift(callidx, putidx, call, put)
-            midpox = calldataidx#*2
-            putpox = putdataidx#*2 +1
-        else:
-            #seprate ,refector using new way
-            plusprice, subprice = self.calculate_atm(call, put)
-            print  plusprice
-            print  subprice
-            callidx, putidx = self.atm_decide(plusprice, subprice)
-            print  callidx
-            print  putidx
-            calldataidx, putdataidx = self.atm_shift(callidx, putidx, call, put)
-            print  calldataidx
-            print  putdataidx
-            midpox = calldataidx# * 2
-            putpox = putdataidx# * 2 + 1
+            #check un-normal decline (like 2016/5/5 wired , 288-> 104-> 196)
+            midpox = 0
+            putpox = 0
+            #not mention begin, so ~~ ha ha
+            if self.interval.get() == "point":
+                # get callrawdata and putrawdata
+                call, put = self.create_atm_form(semifinaldata)
+                # add and sub call and put
+                plusprice, subprice = self.calculate_atm(call, put)
+                # decide callAtm and putAtm
+                callidx, putidx = self.atm_decide(plusprice, subprice)
+                # poick idx of call and put
+                calldataidx, putdataidx = self.atm_shift(callidx, putidx, call, put)
+                midpox = calldataidx#*2
+                putpox = putdataidx#*2 +1
+            else:
+                #seprate ,refector using new way
+                plusprice, subprice = self.calculate_atm(call, put)
+                print  plusprice
+                print  subprice
+                callidx, putidx = self.atm_decide(plusprice, subprice)
+                print  callidx
+                print  putidx
+                calldataidx, putdataidx = self.atm_shift(callidx, putidx, call, put)
+                print  calldataidx
+                print  putdataidx
+                midpox = calldataidx# * 2
+                putpox = putdataidx# * 2 + 1
 
-        data = call[midpox]
-        print "call " + str(data)
-        putdata = put[putpox]
-        print "put " + str(putdata)
+            data = call[midpox]
+            data = data.split(',')
+            print "call " + str(data)
+            putdata = put[putpox]
+            putdata = putdata.split(',')
+            print "put " + str(putdata)
 
-        findata =[]
-        if weekday == "0":
-            weekday = "7"
+            findata =[]
+            if weekday == "0":
+                weekday = "7"
 
-        findata.append(data[0])
-        findata.append(weekday)
-        findata.append(data[3])
-        findata.append(data[4])
-        findata.append(data[5])
-        findata.append(data[6])
-        findata.append(data[7])
-        findata.append(data[13])
-        findata.append(data[14])
+            findata.append(data[0])
+            findata.append(weekday)
+            findata.append(data[3])
+            findata.append(data[4])
+            findata.append(data[5])
+            findata.append(data[6])
+            findata.append(data[7])
+            findata.append(data[13])
+            findata.append(data[14])
 
-        findata.append(putdata[3])
-        findata.append(putdata[4])
-        findata.append(putdata[5])
-        findata.append(putdata[6])
-        findata.append(putdata[7])
-        findata.append(putdata[13])
-        findata.append(putdata[14])
+            findata.append(putdata[3])
+            findata.append(putdata[4])
+            findata.append(putdata[5])
+            findata.append(putdata[6])
+            findata.append(putdata[7])
+            findata.append(putdata[13])
+            findata.append(putdata[14])
 
-        print findata
+            print findata
 
-        ds = ",".join(findata)
-        ds +="\r\n"
-        finalds.append(ds)
+            ds = ",".join(findata)
+            ds +="\r\n"
+            finalds.append(ds)
 
-        # settle data save ,pick and merge later
-        if self.settleday.get() and self.pickorder.get():
-            settleRawData.append([settlePartdata,weekday,data[3],putdata[3]])
+            # settle data save ,pick and merge later
+            if self.settleday.get() and self.pickorder.get():
+                settleRawData.append([settlePartdata,weekday,data[3],putdata[3]])
 
 
         if len(finalds) == 0:
@@ -454,24 +468,28 @@ class Application(Frame):
         return findata
 
 
-    def saveFile(self):
+    def saveFile(self,firstday,lastday):
 
-        #check db has data first
+        grabday = db.get("option/querydate")
+        dbgrabday = grabday.get()
+        dbdayRange = dbgrabday['datelist']
+        firstlimit = self.day1bigDay2Compare(firstday,dbdayRange[0])
+        lastlimit = self.day1SmallDay2Compare(lastday, dbdayRange[1])
+
+        #dayrange in dbrange,data already in db,pass for next function to query
+        if firstlimit and lastlimit:
+            return
+
+        #update db data
         grabday = db.get("option/data")
         dbgrabday = grabday.order_by_key().get()
-        #no data in db
-        if dbgrabday != None:
-            firstday ,endday = self.getdateRange()
-            firstlimit = self.day1SmallDay2Compare(list(dbgrabday)[0], firstday)
-            lastlimit = self.day1SmallDay2Compare(endday, list(dbgrabday)[-1])
-            if firstlimit and lastlimit:
-                dbgrabday = grabday.order_by_key().start_at(firstday).end_at(endday).get()
-                return
 
 
-        for date,zero in self.grabDays.items():
-            #rdateStart = str(dateinfo.year) + '/' + '{:02d}'.format(dateinfo.month) + "/" + '{:02d}'.format(dateinfo.day)
-            #dateEnd = str(dateinfo.year) + '/' + '{:02d}'.format(dateinfo.month) + "/" + '{:02d}'.format(dateinfo.day)
+        for date in self.grabDays:
+            if dbgrabday != None:
+                if date in dbgrabday:
+                    continue
+
             rdateStart = date.replace("\\", "/")
             rdateEnd = date.replace("\\", "/")
             #my_data = {'DATA_DATE': rdateStart, 'DATA_DATE1': rdateEnd, 'datestart': rdateStart, 'dateend': rdateEnd,'COMMODITY_ID': 'TXO', 'his_year': '2017'}
@@ -533,24 +551,26 @@ class Application(Frame):
             call = []
             put = []
             for i,item in enumerate(set1):
+                cell = ','.join(item)
                 if i % 2 ==0:
-                    call.append(item)
+                    call.append(cell)
                 else:
-                    put.append(item)
+                    put.append(cell)
             part = dict()
-            part['call'] = call
-            part['put'] = put
+            part['call'] = '#'.join(map(str, call))
+            part['put'] = '#'.join(map(str, put))
 
             call_1 =[]
             put_1 = []
             for i,item in enumerate(set2):
+                cell = ','.join(item)
                 if i % 2 ==0:
-                    call_1.append(item)
+                    call_1.append(cell)
                 else:
-                    put_1.append(item)
+                    put_1.append(cell)
             part2 = dict()
-            part2['call'] = call_1
-            part2['put'] = put_1
+            part2['call'] = '#'.join(map(str, call_1))
+            part2['put'] = '#'.join(map(str, put_1))
 
             dd = dict()
             dd['part1'] = part
@@ -558,6 +578,8 @@ class Application(Frame):
 
             db.save("option/data/" + rdateStart, dd)
 
+        # over range ,update new range
+        db.save("option/querydate/datelist", [firstday, lastday])
 
 
     def nodata(self, str):
@@ -611,6 +633,14 @@ class Application(Frame):
         newdate2 = time.strptime(day2, "%Y\%m\%d")
 
         return newdate1 <= newdate2
+
+    def day1bigDay2Compare(self, day1, day2):
+        date1 = "2015/12/31"
+        date2 = "2015/12/31"
+        newdate1 = time.strptime(day1, "%Y\%m\%d")
+        newdate2 = time.strptime(day2, "%Y\%m\%d")
+
+        return newdate1 >= newdate2
 
     def settledays(self):
         year, month, mydate = self.datepare(self.databegin.get())
@@ -751,8 +781,8 @@ class Application(Frame):
         plusmidprice = []
         submidprice = []
         for i in range(0, n):
-            calldata = callrawdata[i]
-            putdata = putrawdata[i]
+            calldata = callrawdata[i].split(',')
+            putdata = putrawdata[i].split(',')
             callprice = 0
             putprice = 0
             if calldata[self.OpenOrClose()] == '-':
