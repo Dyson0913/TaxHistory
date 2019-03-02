@@ -858,11 +858,27 @@ class Application(Frame):
 
         if self.interval.get() == "interval":
             if self.tm.get() == "ITM":
+                print int(self.priceVol.get())
                 midpox -= int(self.priceVol.get()) * 1
-                putpox += int(self.priceVol.get()) * 1 + 1 if int(self.priceVol.get()) >= 1 and subcnt2>=2 else 0
+                putpox += int(self.priceVol.get()) * 1
+                if int(self.priceVol.get()) >= 1:
+                    if self.atmWay.get() == 'plusAtm':
+                        if addcnt >= 2:
+                            putpox +=1
+                    else:
+                        if subcnt2 >= 2:
+                            putpox += 1
+
             else:
-                midpox += int(self.priceVol.get()) * 1 + 1 if int(self.priceVol.get()) >= 1 and addcnt>=2 else 0
+                midpox += int(self.priceVol.get()) * 1
                 putpox -= int(self.priceVol.get()) * 1
+                if int(self.priceVol.get()) >= 1:
+                    if self.atmWay.get() == 'plusAtm':
+                        if addcnt >= 2:
+                            midpox +=1
+                    else:
+                        if subcnt2 >= 2:
+                            midpox += 1
         else:
             #find closest self.pointInterval from Atm
             if self.tm.get() == "ITM":
