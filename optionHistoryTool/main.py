@@ -251,6 +251,8 @@ class Application(Frame):
             midpox = 0
             putpox = 0
             #not mention begin, so ~~ ha ha
+            addPriceCnt = 0
+            subPriceCnt2 = 0
             if self.interval.get() == "point":
                 # get callrawdata and putrawdata
                 call, put = self.create_atm_form(semifinaldata)
@@ -259,7 +261,7 @@ class Application(Frame):
                 # decide callAtm and putAtm
                 callidx, putidx = self.atm_decide(plusprice, subprice)
                 # poick idx of call and put
-                calldataidx, putdataidx = self.atm_shift(callidx, putidx, call, put)
+                calldataidx, putdataidx = self.atm_shift(callidx, putidx, call, put,0,0)
                 midpox = calldataidx#*2
                 putpox = putdataidx#*2 +1
             else:
@@ -268,48 +270,35 @@ class Application(Frame):
                 print  plusprice
                 print  subprice
                 callidx, putidx = self.atm_decide(plusprice, subprice)
+                addPriceCnt,subPriceCnt2 = self.doublie_InThePriceCehck(plusprice, subprice)
                 print  callidx
                 print  putidx
-                calldataidx, putdataidx = self.atm_shift(callidx, putidx, call, put)
+                calldataidx, putdataidx = self.atm_shift(callidx, putidx, call, put,addPriceCnt,subPriceCnt2)
                 print  calldataidx
                 print  putdataidx
                 midpox = calldataidx# * 2
                 putpox = putdataidx# * 2 + 1
 
-            data = call[midpox]
-            data = data.split(',')
-            print "call " + str(data)
-            putdata = put[putpox]
-            putdata = putdata.split(',')
-            print "put " + str(putdata)
-
-            findata =[]
             if weekday == "0":
                 weekday = "7"
-
-            findata.append(data[0])
-            findata.append(weekday)
-            findata.append(data[3])
-            findata.append(data[4])
-            findata.append(data[5])
-            findata.append(data[6])
-            findata.append(data[7])
-            findata.append(data[13])
-            findata.append(data[14])
-
-            findata.append(putdata[3])
-            findata.append(putdata[4])
-            findata.append(putdata[5])
-            findata.append(putdata[6])
-            findata.append(putdata[7])
-            findata.append(putdata[13])
-            findata.append(putdata[14])
-
-            print findata
+            findata = self.ouputFun(call[midpox],put[putpox],weekday)
 
             ds = ",".join(findata)
             ds +="\r\n"
             finalds.append(ds)
+
+            if addPriceCnt == 2 and self.atmWay.get() == 'plusAtm':
+                if int(self.priceVol.get()) == 0:
+                    second = self.ouputFun(call[midpox+1], put[putpox+1], weekday)
+                    ds = ",".join(second)
+                    ds += "\r\n"
+                    finalds.append(ds)
+            if subPriceCnt2 == 2 and self.atmWay.get() == 'subAtm':
+                if int(self.priceVol.get()) == 0:
+                    second = self.ouputFun(call[midpox + 1], put[putpox + 1], weekday)
+                    ds = ",".join(second)
+                    ds += "\r\n"
+                    finalds.append(ds)
 
             # settle data save ,pick and merge later
             if self.settleday.get() and self.pickorder.get():
@@ -350,6 +339,34 @@ class Application(Frame):
             self.OutputrawData(call,put)
 
 
+    def ouputFun(self,calldata,putdata,weekday):
+        data = calldata.split(',')
+        print "call " + str(data)
+        putdata = putdata.split(',')
+        print "put " + str(putdata)
+
+        findata = []
+
+        findata.append(data[0])
+        findata.append(weekday)
+        findata.append(str(int(float(data[3]))))
+        findata.append(data[4])
+        findata.append(data[5])
+        findata.append(data[6])
+        findata.append(data[7])
+        findata.append(data[13])
+        findata.append(data[14])
+
+        findata.append(str(int(float(putdata[3]))))
+        findata.append(putdata[4])
+        findata.append(putdata[5])
+        findata.append(putdata[6])
+        findata.append(putdata[7])
+        findata.append(putdata[13])
+        findata.append(putdata[14])
+
+        return  findata
+
     def filterExcusivePart(self,allpart,pickpart):
         n = len(pickpart)
         for i in range(0,n):
@@ -367,7 +384,7 @@ class Application(Frame):
             # decide callAtm and putAtm
             callidx, putidx = self.atm_decide(plusprice, subprice)
             # poick idx of call and put
-            calldataidx, putdataidx = self.atm_shift(callidx, putidx, call, put)
+            calldataidx, putdataidx = self.atm_shift(callidx, putidx, call, put,0,0)
             midpox = calldataidx * 2
             putpox = putdataidx * 2 + 1
 
@@ -807,9 +824,28 @@ class Application(Frame):
         return plusmidprice,submidprice
 
     def atm_decide(self, callprice,putprice):
-        return callprice.index(min(callprice)) ,putprice.index(min(putprice))
+        return  callprice.index(min(callprice)),putprice.index(min(putprice))
 
-    def atm_shift(self,callmid,putmid,callraw,putraw):
+
+    def doublie_InThePriceCehck(self,callprice,putprice):
+        intheprice = callprice.index(min(callprice))
+        cnt = callprice.count(callprice[intheprice])
+        if cnt ==2:
+            if callprice[intheprice+1] == callprice[intheprice]:
+                cnt = 2
+            else:
+                cnt =1
+        intheprice = putprice.index(min(putprice))
+        cnt2 = putprice.count(putprice[intheprice])
+        if cnt2 ==2:
+            if putprice[intheprice+1] ==  putprice[intheprice]:
+                cnt2 = 2
+            else:
+                cnt2 =1
+        return cnt,cnt2
+
+
+    def atm_shift(self,callmid,putmid,callraw,putraw,addcnt,subcnt2):
         midpox = 0
         putpox = 0
 
@@ -823,12 +859,10 @@ class Application(Frame):
         if self.interval.get() == "interval":
             if self.tm.get() == "ITM":
                 midpox -= int(self.priceVol.get()) * 1
-                putpox += int(self.priceVol.get()) * 1
-                #to do ,double Atm
+                putpox += int(self.priceVol.get()) * 1 + 1 if int(self.priceVol.get()) >= 1 and subcnt2>=2 else 0
             else:
-                midpox += int(self.priceVol.get()) * 1
+                midpox += int(self.priceVol.get()) * 1 + 1 if int(self.priceVol.get()) >= 1 and addcnt>=2 else 0
                 putpox -= int(self.priceVol.get()) * 1
-                # to do ,double Atm
         else:
             #find closest self.pointInterval from Atm
             if self.tm.get() == "ITM":
@@ -868,8 +902,8 @@ class Application(Frame):
 
     def OpenOrClose(self):
         if self.OPorCP.get() == "OpenPrice":
-            return 5
-        return 8
+            return 4
+        return 7
 
     def OutputrawData(self,call,put):
         finalds = []
