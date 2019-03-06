@@ -255,13 +255,19 @@ class Application(Frame):
             subPriceCnt2 = 0
             if self.interval.get() == "point":
                 # get callrawdata and putrawdata
-                call, put = self.create_atm_form(semifinaldata)
+                #call, put = self.create_atm_form(semifinaldata)
                 # add and sub call and put
                 plusprice, subprice = self.calculate_atm(call, put)
                 # decide callAtm and putAtm
+                print  plusprice
+                print  subprice
                 callidx, putidx = self.atm_decide(plusprice, subprice)
+                addPriceCnt, subPriceCnt2 = self.doublie_InThePriceCehck(plusprice, subprice)
                 # poick idx of call and put
-                calldataidx, putdataidx = self.atm_shift(callidx, putidx, call, put,0,0)
+                print  callidx
+                print  putidx
+                calldataidx, putdataidx = self.atm_shift(callidx, putidx, call, put,addPriceCnt,subPriceCnt2)
+
                 midpox = calldataidx#*2
                 putpox = putdataidx#*2 +1
             else:
@@ -881,35 +887,41 @@ class Application(Frame):
                             midpox += 1
         else:
             #find closest self.pointInterval from Atm
+            callraw2 = callraw[midpox].split(',')
+            putraw2 = putraw[putpox].split(',')
             if self.tm.get() == "ITM":
-                target = int(float(callraw[midpox][3])) - int(self.pointInterval.get())
+                target = int(float(callraw2[3])) - int(self.pointInterval.get())
                 pick = 0
                 for i in range(0, midpox+1):
-                    if int(float(callraw[i][3])) >= target:
+                    callraw3 = callraw[i].split(',')
+                    if int(float(callraw3[3])) >= target:
                         pick = i
                         break
                 midpox = pick
 
-                target = int(float(putraw[putpox][3])) + int(self.pointInterval.get())
+                target = int(float(putraw2[3])) + int(self.pointInterval.get())
                 n = len(putraw)
                 for i in range(n-1,0,-1):
-                    if int(float(putraw[i][3])) <= target:
+                    putraw3 = putraw[i].split(',')
+                    if int(float(putraw3[3])) <= target:
                         pick = i
                         break
                 putpox = pick
             else:
-                target = int(float(callraw[midpox][3])) + int(self.pointInterval.get())
+                target = int(float(callraw2[3])) + int(self.pointInterval.get())
                 pick = 0
                 n = len(callraw)
                 for i in range(n-1,0, -1):
-                    if int(float(callraw[i][3])) <= target:
+                    callraw3 = callraw[i].split(',')
+                    if int(float(callraw3[3])) <= target:
                         pick = i
                         break
                 midpox = pick
 
-                target = int(float(putraw[putpox][3])) - int(self.pointInterval.get())
+                target = int(float(putraw2[3])) - int(self.pointInterval.get())
                 for i in range(0, putpox+1):
-                    if int(float(putraw[i][3])) >= target:
+                    putraw3 = putraw[i].split(',')
+                    if int(float(putraw3[3])) >= target:
                         pick = i
                         break
                 putpox = pick

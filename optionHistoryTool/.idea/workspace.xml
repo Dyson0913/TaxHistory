@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/main.py" line="920" />
+    <bookmark url="file://$PROJECT_DIR$/main.py" line="932" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fec4cfef-b197-4100-b972-b9abfb00c7f9" name="Default" comment="" />
@@ -16,37 +16,22 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="454">
-              <caret line="870" lean-forward="true" selection-start-line="870" selection-end-line="870" />
+            <state relative-caret-position="257">
+              <caret line="263" selection-start-line="263" selection-end-line="263" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
-                <marker date="1551541923364" expanded="true" signature="308:313" ph="..." />
-                <marker date="1551541923364" expanded="true" signature="4295:4300" ph="..." />
-                <marker date="1551541923364" expanded="true" signature="4323:4921" ph="..." />
-                <marker date="1551541923364" expanded="true" signature="4615:4621" ph="..." />
-                <marker date="1551541923364" expanded="true" signature="4658:4667" ph="..." />
-                <marker date="1551541923364" expanded="true" signature="4658:4921" ph="..." />
-                <marker date="1551541923364" expanded="true" signature="13983:14337" ph="..." />
-                <marker date="1551541923364" expanded="true" signature="14405:15895" ph="..." />
+                <element signature="e#20170#21086#0" />
+                <element signature="e#21142#21330#0" />
+                <element signature="e#21386#21574#0" />
+                <marker date="1551875582712" expanded="true" signature="308:313" ph="..." />
+                <marker date="1551875582712" expanded="true" signature="4295:4300" ph="..." />
+                <marker date="1551875582712" expanded="true" signature="4323:4921" ph="..." />
+                <marker date="1551875582712" expanded="true" signature="4615:4621" ph="..." />
+                <marker date="1551875582712" expanded="true" signature="4658:4667" ph="..." />
+                <marker date="1551875582712" expanded="true" signature="4658:4921" ph="..." />
+                <marker date="1551875582712" expanded="true" signature="14226:14580" ph="..." />
+                <marker date="1551875582712" expanded="true" signature="14648:16138" ph="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/DB/db_proxy.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="27" column="8" selection-start-line="27" selection-start-column="8" selection-end-line="27" selection-end-column="8" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="277">
-              <caret line="1134" selection-start-line="1134" selection-end-line="1134" />
             </state>
           </provider>
         </entry>
@@ -87,11 +72,11 @@
       <find>settlePartdata</find>
       <find>flost</find>
       <find>atm_decide</find>
-      <find>atm_shift</find>
       <find>self.priceVol</find>
       <find>wire</find>
       <find>wiredajdust</find>
       <find>plusAtm</find>
+      <find>atm_shift</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -106,7 +91,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-11" />
     <option name="y" value="16" />
     <option name="width" value="1934" />
@@ -118,6 +103,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -140,7 +126,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -277,7 +262,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20073763" />
       <window_info id="Structure" order="1" weight="0.24973656" />
@@ -285,7 +270,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49367756" weight="0.26681128" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.3391116" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.31852654" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.329718" />
@@ -304,22 +289,22 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>727</line>
+          <line>733</line>
           <option name="timeStamp" value="61" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>769</line>
+          <line>775</line>
           <option name="timeStamp" value="62" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>675</line>
+          <line>681</line>
           <option name="timeStamp" value="72" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>715</line>
+          <line>721</line>
           <option name="timeStamp" value="73" />
         </line-breakpoint>
       </breakpoints>
@@ -397,32 +382,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/DB/db_proxy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
+        <state relative-caret-position="675">
           <caret line="27" column="8" selection-start-line="27" selection-start-column="8" selection-end-line="27" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
+        <state relative-caret-position="512">
           <caret line="1134" selection-start-line="1134" selection-end-line="1134" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="454">
-          <caret line="870" lean-forward="true" selection-start-line="870" selection-end-line="870" />
+        <state relative-caret-position="257">
+          <caret line="263" selection-start-line="263" selection-end-line="263" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-            <marker date="1551541923364" expanded="true" signature="308:313" ph="..." />
-            <marker date="1551541923364" expanded="true" signature="4295:4300" ph="..." />
-            <marker date="1551541923364" expanded="true" signature="4323:4921" ph="..." />
-            <marker date="1551541923364" expanded="true" signature="4615:4621" ph="..." />
-            <marker date="1551541923364" expanded="true" signature="4658:4667" ph="..." />
-            <marker date="1551541923364" expanded="true" signature="4658:4921" ph="..." />
-            <marker date="1551541923364" expanded="true" signature="13983:14337" ph="..." />
-            <marker date="1551541923364" expanded="true" signature="14405:15895" ph="..." />
+            <element signature="e#20170#21086#0" />
+            <element signature="e#21142#21330#0" />
+            <element signature="e#21386#21574#0" />
+            <marker date="1551875582712" expanded="true" signature="308:313" ph="..." />
+            <marker date="1551875582712" expanded="true" signature="4295:4300" ph="..." />
+            <marker date="1551875582712" expanded="true" signature="4323:4921" ph="..." />
+            <marker date="1551875582712" expanded="true" signature="4615:4621" ph="..." />
+            <marker date="1551875582712" expanded="true" signature="4658:4667" ph="..." />
+            <marker date="1551875582712" expanded="true" signature="4658:4921" ph="..." />
+            <marker date="1551875582712" expanded="true" signature="14226:14580" ph="..." />
+            <marker date="1551875582712" expanded="true" signature="14648:16138" ph="..." />
           </folding>
         </state>
       </provider>
