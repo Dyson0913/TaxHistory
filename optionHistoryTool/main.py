@@ -199,12 +199,18 @@ class Application(Frame):
             dbgrabday = grabday.get()
             if dbgrabday == None:
                 #create datelist
-                db.save("option/querydate/datelist", [firstday,lastday])
+                dayrange = dict()
+                dayrange['firstday'] = firstday
+                dayrange['lastday'] = lastday
+                db.save("option/querydate/datelist", dayrange)
 
         else:
             if self.settlefilter():
                 self.errorMsg("settle day error occurred!! check data/settle.txt for more infomation")
                 return
+
+            firstday =  self.grabDays[0]
+            lastday =  self.grabDays[-1]
 
         #print len(self.grabDays)
         #save file
@@ -213,9 +219,9 @@ class Application(Frame):
         self.stateS.set("start = grab data ok")
 
         #load db data
-        self.loadcsv()
+        self.loadcsv(firstday,lastday)
 
-    def loadcsv(self):
+    def loadcsv(self,firstday,endday):
 
         stopdayname = '0'
         finalfileName = ""
@@ -223,8 +229,8 @@ class Application(Frame):
         settleRawData = []
 
         grabday = db.get("option/data")
-        dbgrabday = grabday.order_by_key().get()
-        firstday, endday = self.getdateRange()
+        #dbgrabday = grabday.order_by_key().get()
+        #firstday, endday = self.getdateRange()
         dbgrabday = grabday.order_by_key().start_at(firstday).end_at(endday).get()
 
         n = len(dbgrabday)
@@ -238,6 +244,10 @@ class Application(Frame):
         put = []
         weekday =''
         for data,value in dbgrabday.items():
+            if self.settleday.get() == 1:
+                #exculsive normal day
+                if data not in self.grabDays:
+                    continue
             arr = data.split('\\')
             weekday = datetime.datetime(int(arr[0]),int(arr[1]),int(arr[2])).strftime("%w")
             if self.settleday.get() and self.pickorder.get():
@@ -253,37 +263,23 @@ class Application(Frame):
             #not mention begin, so ~~ ha ha
             addPriceCnt = 0
             subPriceCnt2 = 0
-            if self.interval.get() == "point":
-                # get callrawdata and putrawdata
-                #call, put = self.create_atm_form(semifinaldata)
-                # add and sub call and put
-                plusprice, subprice = self.calculate_atm(call, put)
-                # decide callAtm and putAtm
-                print  plusprice
-                print  subprice
-                callidx, putidx = self.atm_decide(plusprice, subprice)
-                addPriceCnt, subPriceCnt2 = self.doublie_InThePriceCehck(plusprice, subprice)
-                # poick idx of call and put
-                print  callidx
-                print  putidx
-                calldataidx, putdataidx = self.atm_shift(callidx, putidx, call, put,addPriceCnt,subPriceCnt2)
 
-                midpox = calldataidx#*2
-                putpox = putdataidx#*2 +1
-            else:
-                #seprate ,refector using new way
-                plusprice, subprice = self.calculate_atm(call, put)
-                print  plusprice
-                print  subprice
-                callidx, putidx = self.atm_decide(plusprice, subprice)
-                addPriceCnt,subPriceCnt2 = self.doublie_InThePriceCehck(plusprice, subprice)
-                print  callidx
-                print  putidx
-                calldataidx, putdataidx = self.atm_shift(callidx, putidx, call, put,addPriceCnt,subPriceCnt2)
-                print  calldataidx
-                print  putdataidx
-                midpox = calldataidx# * 2
-                putpox = putdataidx# * 2 + 1
+            # get callrawdata and putrawdata
+            #call, put = self.create_atm_form(semifinaldata)
+            # add and sub call and put
+            plusprice, subprice = self.calculate_atm(call, put)
+            # decide callAtm and putAtm
+            print  plusprice
+            print  subprice
+            callidx, putidx = self.atm_decide(plusprice, subprice)
+            addPriceCnt, subPriceCnt2 = self.doublie_InThePriceCehck(plusprice, subprice)
+            # poick idx of call and put
+            print  callidx
+            print  putidx
+            calldataidx, putdataidx = self.atm_shift(callidx, putidx, call, put,addPriceCnt,subPriceCnt2)
+
+            midpox = calldataidx
+            putpox = putdataidx
 
             if weekday == "0":
                 weekday = "7"
@@ -496,8 +492,8 @@ class Application(Frame):
         grabday = db.get("option/querydate")
         dbgrabday = grabday.get()
         dbdayRange = dbgrabday['datelist']
-        firstlimit = self.day1bigDay2Compare(firstday,dbdayRange[0])
-        lastlimit = self.day1SmallDay2Compare(lastday, dbdayRange[1])
+        firstlimit = self.day1bigDay2Compare(firstday,dbdayRange['firstday'])
+        lastlimit = self.day1SmallDay2Compare(lastday, dbdayRange['lastday'])
 
         #dayrange in dbrange,data already in db,pass for next function to query
         if firstlimit and lastlimit:
@@ -602,7 +598,10 @@ class Application(Frame):
             db.save("option/data/" + rdateStart, dd)
 
         # over range ,update new range
-        db.save("option/querydate/datelist", [firstday, lastday])
+        range = dict()
+        range['firstday'] = firstday
+        range['lastday'] = lastday
+        db.save("option/querydate/datelist",range)
 
 
     def nodata(self, str):
@@ -673,15 +672,17 @@ class Application(Frame):
         endday =  str(eyear) + "\\" + '{:02d}'.format(emonth)  +"\\"+'{:02d}'.format(emydate)
 
         #check db first
-        settleday = db.get("option/settledays")
-        settle = settleday.order_by_key().get()
-        firstlimit = self.day1SmallDay2Compare(list(settle)[0],firstday)
-        lastlimit = self.day1SmallDay2Compare(endday,list(settle)[-1])
+        settleday = db.get("option/settledays/settlehistory")
+        settle = settleday.get()
+        if settle != None:
+            historyday = db.get("option/settledays/settlehistory").get().split(',')
+            firstlimit = self.day1bigDay2Compare(firstday,historyday[0])
+            lastlimit = self.day1SmallDay2Compare(endday,historyday[-1])
 
-        #in db range just return db info, not ,biger or last , grab again
-        if firstlimit and lastlimit:
-            settle = settleday.order_by_key().start_at(firstday).end_at(endday).get()
-            return settle
+            #in db range just return db info, not ,biger or last , grab again
+            if firstlimit and lastlimit:
+                settle =  self.getdbsettleday("option/settledays/settlehistory",firstday,endday)
+                return settle
 
 
         #r = requests.post('http://www.taifex.com.tw/cht/5/FutIndxFSP.asp', data=my_data)
@@ -709,18 +710,39 @@ class Application(Frame):
                 #print cells[0].find(text=True)
                 filterdata.append(cells[0].find(text=True))
 
-        if settleday == None:
-             for item in filterdata:
-                 db.save("option/settledays/"+item.replace("/", "\\"), json.dumps(0))
+        if settle == None:
+            filterdata.sort()
+            datastring = ','.join(filterdata)
+            datastring = datastring.replace("/", "\\")
+            settle = dict()
+            settle['settlehistory'] = datastring
+            db.save("option/settledays",settle)
         else:
-            # update
-            for item in filterdata:
-                day = db.get("option/settledays/"+item.replace("/", "\\"))
-                if day.get() == None:
-                    db.save("option/settledays/" + item.replace("/", "\\"), json.dumps(0))
+            #get hisotry settle day
+            historyday = db.get("option/settledays/settlehistory").get().split(',')
 
-        settle = settleday.order_by_key().start_at(firstday).end_at(endday).get()
+            # if new settle day not in history ,update it
+            for item in filterdata:
+                item = item.replace("/", "\\")
+                if item not in historyday:
+                    historyday.append(item)
+
+            historyday.sort()
+
+            datastring = ','.join(historyday)
+            settle = dict()
+            settle['settlehistory'] = datastring
+            db.save("option/settledays",settle)
+
+        settle =  self.getdbsettleday("option/settledays/settlehistory",firstday,endday) #settleday.order_by_key().start_at(firstday).end_at(endday).get()
         return settle
+
+    def getdbsettleday(self,key,firstday,endday):
+        historyday = db.get(key).get().split(',')
+        pick = []
+        smallthen = filter(lambda day: self.day1SmallDay2Compare(day, endday), historyday)
+        rangeday = filter(lambda day: self.day1bigDay2Compare(day, firstday), historyday)
+        return  rangeday
 
     def getdateRange(self):
         year, month, mydate = self.datepare(self.databegin.get())
