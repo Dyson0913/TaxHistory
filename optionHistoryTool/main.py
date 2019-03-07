@@ -242,6 +242,8 @@ class Application(Frame):
         semifinaldata = []
         call = []
         put = []
+        part1Call = []
+        part1Put = []
         weekday =''
         for data,value in dbgrabday.items():
             if self.settleday.get() == 1:
@@ -253,6 +255,9 @@ class Application(Frame):
             if self.settleday.get() and self.pickorder.get():
                 call = value["part2"]['call'].split('#')
                 put = value["part2"]['put'].split('#')
+                #part1 extral saving
+                part1Call = [str(i) for i in value["part1"]['call'].split('#')]
+                part1Put = [str(i) for i in value["part1"]['put'].split('#')]
             else:
                 call = [str(i) for i in value["part1"]['call'].split('#')]
                 put = [str(i) for i in value["part1"]['put'].split('#')]
@@ -304,7 +309,7 @@ class Application(Frame):
 
             # settle data save ,pick and merge later
             if self.settleday.get() and self.pickorder.get():
-                settleRawData.append([settlePartdata,weekday,data[3],putdata[3]])
+                settleRawData.append([part1Call,part1Put,weekday,findata[2],findata[9]])
 
 
         if len(finalds) == 0:
@@ -314,15 +319,15 @@ class Application(Frame):
         #mereg pick settle
         merge = []
         if self.settleday.get() and self.pickorder.get():
-            finalds.reverse()
             merge.append(finalds.pop(0))
             settlePart = self.settlePick(settleRawData)
             n = len(settlePart)
 
             for i in range(0,n):
-
                 merge.append(settlePart[i])
                 merge.append(finalds[i])
+
+            merge
         else:
             merge = finalds
 
@@ -422,68 +427,45 @@ class Application(Frame):
 
     def settlePick(self,RawSettle):
         n = len(RawSettle)
-        RawSettle.reverse()
         finalds = []
         for i in range(0,n-1):
             raw = RawSettle[i]
-            findata3 = self.settlePickSamePrice(RawSettle[i+1][0], raw[1], raw[2], raw[3])
+            findata3 = self.settlePickSamePrice(RawSettle[i+1][0],RawSettle[i+1][1], raw[2], raw[3], raw[4])
             dds = ",".join(findata3)
             dds += "\r\n"
             finalds.append(dds)
-
         return finalds
 
-    def settlePickSamePrice(self,settledata,weekday,callPrice,putPrice):
-        if self.interval.get() == "point":
-            # get callrawdata and putrawdata
-            call, put = self.create_atm_form(settledata)
+    def settlePickSamePrice(self,part1call,part1put,weekday,callPrice,putPrice):
 
-            n = len(call)
-            calldataidx =0
-            for i in range(0,n):
-                num = int(float(call[i][3]))
-                if int(float(callPrice)) == num:
-                    calldataidx =i
-                    break
-            n = len(put)
-            putdataidx = 0
-            for i in range(0,n):
-                num = int(float(put[i][3]))
-                if int(float(putPrice)) == num:
-                    putdataidx =i
-                    break
+        n = len(part1call)
+        calldataidx =0
+        for i in range(0,n):
+            call = part1call[i].split(',')
+            num = int(float(call[3]))
+            if int(float(callPrice)) == num:
+                calldataidx =i
+                break
 
-            midpox = calldataidx * 2
-            putpox = putdataidx * 2 + 1
+        n = len(part1put)
+        putdataidx = 0
+        for i in range(0,n):
+            put = part1put[i].split(',')
+            num = int(float(put[3]))
+            if int(float(putPrice)) == num:
+                putdataidx =i
+                break
 
-        data = settledata[midpox]
-        print "call " + str(data)
+        midpox = calldataidx
+        putpox = putdataidx
 
-        putdata = settledata[putpox]
-        print "put " + str(putdata)
+        data = part1call[midpox]
+        putdata = part1put[putpox]
 
         if weekday == "0":
             weekday = "7"
 
-        findata = []
-        findata.append(data[0])
-        findata.append(weekday)
-        findata.append(data[3])
-        findata.append(data[5])
-        findata.append(data[6])
-        findata.append(data[7])
-        findata.append(data[8])
-        findata.append(data[14])
-        findata.append(data[15])
-
-        findata.append(putdata[3])
-        findata.append(putdata[5])
-        findata.append(putdata[6])
-        findata.append(putdata[7])
-        findata.append(putdata[8])
-        findata.append(putdata[14])
-        findata.append(putdata[15])
-
+        findata = self.ouputFun(data,putdata,weekday)
         return findata
 
 
