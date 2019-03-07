@@ -304,13 +304,16 @@ class Application(Frame):
                     second = self.ouputFun(call[midpox+1], put[putpox+1], weekday)
                     ds = ",".join(second)
                     ds += "\r\n"
-                    finalds.append(ds)
+                    # open price not include 2 ATM, complicate!!
+                    if self.settleday.get() == False and self.pickorder.get() == False:
+                        finalds.append(ds)
             if subPriceCnt2 == 2 and self.atmWay.get() == 'subAtm':
                 if int(self.priceVol.get()) == 0:
                     second = self.ouputFun(call[midpox + 1], put[putpox + 1], weekday)
                     ds = ",".join(second)
                     ds += "\r\n"
-                    finalds.append(ds)
+                    if self.settleday.get() == False and self.pickorder.get() == False:
+                        finalds.append(ds)
 
             # settle data save ,pick and merge later
             if self.settleday.get() and self.pickorder.get():
