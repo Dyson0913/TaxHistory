@@ -584,14 +584,14 @@ class Application(Frame):
             dd['part2'] = part2
 
             db.save("option/data/" + rdateStart, dd)
-            anyupdate = True
 
         # over range ,update new range
-        if anyupdate:
-            range = dict()
-            range['firstday'] = firstday
-            range['lastday'] = lastday
-            db.save("option/querydate/datelist",range)
+        #re write first day
+        if firstlimit == False:
+            dbdayRange['firstday'] = firstday
+        if lastlimit == False:
+            dbdayRange['lastday'] = lastday
+        db.save("option/querydate/datelist",dbdayRange)
 
 
     def nodata(self, str):
