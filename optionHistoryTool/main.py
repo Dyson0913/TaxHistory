@@ -175,6 +175,7 @@ class Application(Frame):
         totalday = -(nowday-backday).days+1
 
         # count for now day
+        self.state = 0
         oneday = datetime.timedelta(days=1)
         self.grabDays = []#OrderedDict()
         alldaymaker = []
@@ -206,7 +207,7 @@ class Application(Frame):
 
         else:
             if self.settlefilter():
-                self.errorMsg("settle day error occurred!! check data/settle.txt for more infomation")
+                self.errorMsg("settle day error occurred!! no match settle data")
                 return
 
             firstday =  self.grabDays[0]
@@ -217,6 +218,9 @@ class Application(Frame):
         self.stateS.set("start = grab data....")
         self.saveFile(firstday,lastday)
         self.stateS.set("start = grab data ok")
+
+        if self.state ==1:
+            return
 
         #load db data
         self.loadcsv(firstday,lastday)
@@ -239,12 +243,13 @@ class Application(Frame):
             self.errorMsg("no match data ,output empty file")
             return
 
-        semifinaldata = []
         call = []
         put = []
         part1Call = []
         part1Put = []
         weekday =''
+        midpox = 0
+        putpox = 0
         for data,value in dbgrabday.items():
             if self.settleday.get() == 1:
                 #exculsive normal day
@@ -485,7 +490,7 @@ class Application(Frame):
         grabday = db.get("option/data")
         dbgrabday = grabday.order_by_key().get()
 
-
+        anyupdate = False
         for date in self.grabDays:
             if dbgrabday != None:
                 if date in dbgrabday:
@@ -514,6 +519,7 @@ class Application(Frame):
             set2 = []
             putin = 0
             putCnt = 0
+
             for row in reader:
                 if i == 0:
                     i = 1
@@ -578,12 +584,14 @@ class Application(Frame):
             dd['part2'] = part2
 
             db.save("option/data/" + rdateStart, dd)
+            anyupdate = True
 
         # over range ,update new range
-        range = dict()
-        range['firstday'] = firstday
-        range['lastday'] = lastday
-        db.save("option/querydate/datelist",range)
+        if anyupdate:
+            range = dict()
+            range['firstday'] = firstday
+            range['lastday'] = lastday
+            db.save("option/querydate/datelist",range)
 
 
     def nodata(self, str):
@@ -943,21 +951,22 @@ class Application(Frame):
         n = len(call)
         for i in range(0,n):
             findata = []
-            findata.append(call[i][5])
-            findata.append(call[i][6])
-            findata.append(call[i][7])
-            findata.append(call[i][8])
-            findata.append(call[i][14])
-            findata.append(call[i][15])
-            findata.append(call[i][3])
+            calldata = call[i].split(",")
+            findata.append(calldata[4])
+            findata.append(calldata[5])
+            findata.append(calldata[6])
+            findata.append(calldata[7])
+            findata.append(calldata[13])
+            findata.append(calldata[14])
+            findata.append(calldata[3])
 
-
-            findata.append(put[i][5])
-            findata.append(put[i][6])
-            findata.append(put[i][7])
-            findata.append(put[i][8])
-            findata.append(put[i][14])
-            findata.append(put[i][15])
+            putdata = put[i].split(",")
+            findata.append(putdata[4])
+            findata.append(putdata[5])
+            findata.append(putdata[6])
+            findata.append(putdata[7])
+            findata.append(putdata[13])
+            findata.append(putdata[14])
 
             ds = ",".join(findata)
             ds += "\r\n"
@@ -968,7 +977,6 @@ class Application(Frame):
             fp.write(item)
 
         fp.close()
-
 
 
     def __init__(self, master=None):
